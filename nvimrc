@@ -25,9 +25,9 @@ syntax on
 let mapleader="ö"
 let maplocalleader="ä"
 
-map <Leader>tr :NERDTreeToggle<cr>
-map <Leader>tf :NERDTreeFocus<cr>
-map <Leader>ls :CtrlPBuffer<cr>
+map <silent> <Leader>tr :NERDTreeToggle<cr>
+map <silent> <Leader>tf :NERDTreeFocus<cr>
+map <silent> <Leader>ls :CtrlPBuffer<cr>
 
 command! FixWhitespaces %s/\s\+$//g
 
@@ -45,8 +45,8 @@ nnoremap * *N
 nnoremap # #N
 vnoremap * *N
 vnoremap # #N
-nnoremap <Tab> :bnext<CR>
-nnoremap <S-Tab> :bprevious<CR>
+nnoremap <silent> <Tab> :bnext<CR>
+nnoremap <silent> <S-Tab> :bprevious<CR>
 nnoremap / /\v
 vnoremap / /\v
 nnoremap ? ?\v
