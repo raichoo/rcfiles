@@ -40,7 +40,7 @@ noremap <Up> <nop>
 noremap <Down> <nop>
 noremap <Left> <nop>
 noremap <Right> <nop>
-nnoremap <silent> <esc> :noh<CR><esc>
+nnoremap <silent> <C-l> :noh<CR><C-l>
 nnoremap * *N
 nnoremap # #N
 vnoremap * *N
