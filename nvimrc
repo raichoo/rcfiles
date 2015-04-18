@@ -52,6 +52,7 @@ vnoremap / /\v
 nnoremap ? ?\v
 vnoremap ? ?\v
 
+cnoremap <C-a> <Home>
 cnoremap <C-e> <end>
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
