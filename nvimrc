@@ -139,7 +139,7 @@ let g:haskell_enable_pattern_synonyms = 1
 
 let g:hamlet_prevent_invalid_nesting = 0
 
-let g:ctrlp_map = '<Leader> :CtrlP<cr>'
+let g:ctrlp_map = '<Leader>pp :CtrlP<cr>'
 
 let g:neocomplcache_enable_at_startup = 1
 let g:neocomplcache_enable_smart_case = 1
