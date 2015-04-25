@@ -10,6 +10,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
 Plug 'tomasr/molokai'
 Plug 'Shougo/neocomplcache.vim'
+Plug 'godlygeek/tabular'
 
 "haskell
 Plug 'raichoo/haskell-vim'
