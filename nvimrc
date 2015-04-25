@@ -67,7 +67,7 @@ cnoremap <M-f> <S-Right>
 set clipboard=unnamedplus
 set mouse=nv
 set hlsearch
-set ignorecase
+"set ignorecase
 set hidden
 set background=dark
 set incsearch
