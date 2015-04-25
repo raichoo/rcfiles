@@ -11,6 +11,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tomasr/molokai'
 Plug 'Shougo/neocomplcache.vim'
 Plug 'godlygeek/tabular'
+Plug 'raichoo/snipmate.vim'
 
 "haskell
 Plug 'raichoo/haskell-vim'
