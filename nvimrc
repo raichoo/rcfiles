@@ -1,23 +1,31 @@
 call plug#begin('~/.nvim/plugged')
 
-Plug 'kien/ctrlp.vim'
+"colors
+Plug 'tomasr/molokai'
+
+Plug 'ctrlpvim/ctrlp.vim'
 Plug 'bling/vim-airline'
 Plug 'scrooloose/nerdtree'
-"Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/syntastic'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
-Plug 'tomasr/molokai'
+Plug 'tpope/vim-repeat'
 Plug 'Shougo/neocomplcache.vim'
 Plug 'godlygeek/tabular'
-Plug 'raichoo/snipmate.vim'
-
+Plug 'derekwyatt/vim-scala'
+Plug 'benekastah/neomake'
+Plug 'derekelkins/agda-vim'
+Plug 'leafgarland/typescript-vim'
+Plug 'michaeljsmith/vim-indent-object'
 "haskell
-Plug 'raichoo/haskell-vim'
+Plug 'neovimhaskell/haskell-vim'
+Plug 'neovimhaskell/neovim-ghcmod'
 Plug 'pbrisbin/vim-syntax-shakespeare'
 
 Plug 'idris-hackers/idris-vim'
+
+Plug 'raichoo/smt-vim'
 
 call plug#end()
 
@@ -26,7 +34,7 @@ filetype plugin indent on
 syntax on
 
 let mapleader="ö"
-let maplocalleader="ä"
+let maplocalleader="\\"
 
 map <silent> <Leader>tr :NERDTreeToggle<cr>
 map <silent> <Leader>tf :NERDTreeFocus<cr>
@@ -94,10 +102,11 @@ set noswapfile
 set list
 set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
 set nowrap
-set foldenable
-set foldnestmax=10
+" set foldenable
+" set foldnestmax=10
 
 colorscheme molokai
+
 highlight MatchParen guibg=bg guifg=#FD971F gui=Bold
 highlight VertSplit guifg=#465457 guibg=#465457
 highlight StatusLineNC guifg=#465457 guibg=#465457
@@ -108,6 +117,13 @@ function! CSettings()
   set tabstop=4
 endfunction
 
+function! HaskellSettings()
+  map <silent> <buffer> <LocalLeader>cs :GhcModCaseSplit<cr>
+  map <silent> <buffer> <LocalLeader>re :GhcModRefine<cr>
+  map <silent> <buffer> <LocalLeader>de :GhcModAddDecl<cr>
+endfunction
+
+au BufNewFile,BufRead *.hs call HaskellSettings()
 au BufNewFile,BufRead *.d setf dtrace
 au BufNewFile,BufRead *.agda setf agda
 au BufNewFile,BufRead *.c,*.cpp call CSettings()
@@ -117,18 +133,20 @@ au InsertLeave * set cursorline
 au vimenter * if !argc() | NERDTree | endif
 au bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
-au BufReadPost fugitive://* set bufhidden=delete
+let g:NERDCustomDelimiters = {
+    \ 'idris': { 'left': '{-', 'right': '-}', 'leftAlt': '--' }
+\}
 
 let NERDTreeMinimalUI = 1
+
+au BufReadPost fugitive://* set bufhidden=delete
+
 
 let g:syntastic_check_on_wq = 0
 let g:syntastic_mode_map = { 'mode': 'passive',
                            \ 'active_filetypes': [],
                            \ 'passive_filetypes': [] }
 
-let g:NERDCustomDelimiters = {
-    \ 'idris': { 'left': '{-', 'right': '-}', 'leftAlt': '--' }
-\}
 
 let g:haskell_enable_quantification = 1
 "let g:haskell_enable_recursivedo = 1
@@ -138,6 +156,8 @@ let g:haskell_enable_typeroles = 1
 let g:haskell_enable_pattern_synonyms = 1
 
 let g:hamlet_prevent_invalid_nesting = 0
+
+let g:agda_extraincpaths = ["/home/raichoo/Sources/agda-stdlib/src"]
 
 let g:ctrlp_map = '<Leader>pp :CtrlP<cr>'
 
@@ -158,3 +178,7 @@ let g:airline#extensions#tabline#left_sep = '>'
 let g:airline#extensions#tabline#left_alt_sep = '>'
 let g:airline#extensions#tabline#show_close_button = 0
 let g:airline#extensions#tabline#show_tab_type = 0
+
+let g:ctrlp_custom_ignore = {
+  \ 'file': '\v(\.o|\.hi|\.dyn_o|\.dyn_hi)$'
+  \ }
