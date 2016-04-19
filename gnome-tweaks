@@ -1,0 +1,4 @@
+#map caps lock to esc
+gsettings set org.gnome.desktop.input-sources xkb-options "['caps:escape']"
+#disable trackpack
+xinput --disable 11
