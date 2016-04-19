@@ -89,8 +89,12 @@ inoremap <PageDown> <nop>
 nnoremap <silent> <C-l> :noh<CR><C-l>
 nnoremap * *N
 nnoremap # #N
+nnoremap g* g*N
+nnoremap g# g#N
 vnoremap * *N
 vnoremap # #N
+vnoremap g* g*N
+vnoremap g# g#N
 nnoremap <silent> <Tab> :next<CR>
 nnoremap <silent> <S-Tab> :previous<CR>
 
