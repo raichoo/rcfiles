@@ -65,10 +65,10 @@ endfunction
 autocmd! User FzfStatusLine setlocal statusline=%#airline_z#\ FZF\ %#airline_a_to_airline_b#>%#airline_x_inactive#>
 command! FixWhitespaces call <SID>FixWhitespaces()
 
-nnoremap j gj
-nnoremap k gk
-vnoremap j gj
-vnoremap k gk
+nnoremap <expr> j v:count ? 'j' : 'gj'
+nnoremap <expr> k v:count ? 'k' : 'gk'
+vnoremap <expr> j v:count ? 'j' : 'gj'
+vnoremap <expr> k v:count ? 'k' : 'gk'
 
 noremap <Up> <nop>
 noremap <Down> <nop>
