@@ -50,7 +50,7 @@ map <silent> <Leader>ls :Buffers<CR>
 map <silent> <Leader>lm :Marks<CR>
 map <silent> <Leader>lw :Windows<CR>
 map <silent> <Leader>nm :Neomake<cr>
-
+map Y y$
 function! <SID>FixWhitespaces()
   let l:search = @/
   let l:l = line('.')
