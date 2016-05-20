@@ -1,5 +1,3 @@
-let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
-
 call plug#begin('~/.nvim/plugged')
 
 "colors
@@ -106,6 +104,7 @@ cnoremap <C-b> <nop>
 cnoremap <M-b> <nop>
 cnoremap <M-f> <nop>
 
+set termguicolors
 set cedit=<C-f>
 set clipboard=unnamedplus
 set mouse=nv
