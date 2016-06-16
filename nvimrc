@@ -2,7 +2,6 @@ call plug#begin('~/.nvim/plugged')
 
 "colors
 Plug 'tomasr/molokai'
-Plug 'altercation/vim-colors-solarized'
 
 " fzf
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -18,7 +17,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-repeat'
 Plug 'Shougo/deoplete.nvim'
-" Plug 'Shougo/neosnippet.vim'
 Plug 'godlygeek/tabular'
 Plug 'derekwyatt/vim-scala'
 Plug 'benekastah/neomake'
@@ -44,13 +42,13 @@ let mapleader="ö"
 let maplocalleader="\\"
 
 map <silent> <Leader>tr :NERDTreeToggle<cr>
-map <silent> <Leader>tf :NERDTreeFocus<cr>
 map <silent> <Leader>lf :Files<cr>
 map <silent> <Leader>ls :Buffers<CR>
 map <silent> <Leader>lm :Marks<CR>
 map <silent> <Leader>lw :Windows<CR>
 map <silent> <Leader>nm :Neomake<cr>
 map Y y$
+
 function! <SID>FixWhitespaces()
   let l:search = @/
   let l:l = line('.')
@@ -152,16 +150,14 @@ au BufNewFile,BufRead *.dump-cmm,*.dump-opt-cmm setf c
 au BufNewFile,BufRead *.dump-asm setf asm
 au BufNewFile,BufRead *.d setf dtrace
 au BufNewFile,BufRead *.agda setf agda
-
+au TermOpen term://* setlocal number | setlocal relativenumber | setlocal nolist | setlocal numberwidth=5
 au InsertEnter * set nocursorline
 au InsertLeave * set cursorline
-
 au vimenter * if !argc() | NERDTree | endif
 au bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+au BufReadPost fugitive://* set bufhidden=delete
 
 let NERDTreeMinimalUI = 1
-
-au BufReadPost fugitive://* set bufhidden=delete
 
 let g:haskell_enable_quantification = 1
 "let g:haskell_enable_recursivedo = 1
