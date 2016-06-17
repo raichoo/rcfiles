@@ -24,6 +24,7 @@ Plug 'derekelkins/agda-vim'
 Plug 'leafgarland/typescript-vim'
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'idris-hackers/idris-vim'
+Plug 'dag/vim-fish'
 Plug 'raichoo/smt-vim'
 "haskell
 Plug 'neovimhaskell/haskell-vim'
