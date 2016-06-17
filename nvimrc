@@ -136,7 +136,7 @@ set noswapfile
 set list
 set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
 set wrap
-set formatoptions+=jt
+set formatoptions+=jc
 set textwidth=80
 
 colorscheme molokai
