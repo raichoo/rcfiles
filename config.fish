@@ -80,6 +80,6 @@ function fish_user_key_bindings
   bind -e -M default \r
   bind -M insert \n force-repaint execute
   bind -M insert \r force-repaint execute
-  bind -M default \n force-repaint execute
-  bind -M default \r force-repaint execute
+  bind -M default --sets-mode insert \n force-repaint execute
+  bind -M default --sets-mode insert \r force-repaint execute
 end
