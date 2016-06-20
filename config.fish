@@ -74,5 +74,8 @@ function fish_mode_prompt
 end
 
 function fish_user_key_bindings
-  fish_vi_key_bindings
+  bind -e -M insert \n
+  bind -e -M insert \r
+  bind -M insert \n force-repaint execute
+  bind -M insert \r force-repaint execute
 end
