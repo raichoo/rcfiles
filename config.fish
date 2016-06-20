@@ -56,8 +56,13 @@ function fish_prompt
 end
 
 function fish_right_prompt
+  set -l _status $status
   echo -n "⟦"
-  set_color --bold A6E22E
+  if test $_status = 0
+    set_color --bold A6E22E
+  else
+    set_color --bold EF5939
+  end
   date +"%T"
   set_color normal
   echo -n "⟧"
