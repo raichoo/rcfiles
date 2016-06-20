@@ -16,6 +16,7 @@ set -x DARCS_ALWAYS_COLOR 1
 set -x JAVA_HOME /usr
 set -x TERM xterm-256color
 set -x EDITOR /home/raichoo/Local/bin/nvim
+set -x fish_key_bindings fish_vi_key_bindings
 set -g fish_term24bit 1
 
 alias vi=nvim
