@@ -19,12 +19,18 @@ set -x DARCS_ALWAYS_COLOR 1
 set -x JAVA_HOME /usr
 set -x TERM xterm-256color
 set -x EDITOR /home/raichoo/Local/bin/nvim
-set -x fish_key_bindings fish_vi_key_bindings
 set -g fish_term24bit 1
 
-alias vi=nvim
-alias vim=nvim
-alias vimdiff="nvim -d"
+function start_vi
+  if test -e .stack-work
+    stack exec /home/raichoo/Local/bin/nvim -- $argv
+  else
+    /home/raichoo/Local/bin/nvim $argv
+  end
+end
+
+alias vi=start_vi
+alias vim=start_vi
 
 function fish_greeting
 end
