@@ -2,6 +2,9 @@
 #. /home/raichoo/.opam/opam-init/init.fish > /dev/null 2> /dev/null or true
 
 # setup paths
+
+fish_vi_key_bindings
+
 if test "$NVIM_LISTEN_ADDRESS" = ""
   set PATH /home/raichoo/Local/bin /home/raichoo/.local/bin $PATH
   set MANPATH /home/raichoo/Local/man /usr/share/man $MANPATH
