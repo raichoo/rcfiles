@@ -137,7 +137,7 @@ set directory=~/.nvim/tmp/swap//
 set backup
 set noswapfile
 set list
-set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
+set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮,nbsp:·
 set wrap
 set formatoptions+=jc
 set textwidth=80
