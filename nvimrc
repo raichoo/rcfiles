@@ -182,6 +182,9 @@ let g:haskell_enable_quantification = 1
 let g:haskell_enable_typeroles = 1
 let g:haskell_enable_pattern_synonyms = 1
 
+highlight ghcmodType guifg=white guibg=green
+let g:ghcmod_type_highlight = 'ghcmodType'
+
 let g:hamlet_prevent_invalid_nesting = 0
 
 let g:agda_extraincpaths = ["/home/raichoo/Sources/agda-stdlib/src"]
