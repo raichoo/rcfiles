@@ -26,6 +26,9 @@ Plug 'michaeljsmith/vim-indent-object'
 Plug 'idris-hackers/idris-vim'
 Plug 'dag/vim-fish'
 Plug 'raichoo/smt-vim'
+Plug 'rust-lang/rust.vim'
+Plug 'raichoo/purescript-vim'
+
 "haskell
 Plug 'neovimhaskell/haskell-vim'
 Plug 'pbrisbin/vim-syntax-shakespeare'
