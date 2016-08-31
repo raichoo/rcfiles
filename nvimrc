@@ -150,13 +150,23 @@ highlight StatusLineNC guifg=#465457 guibg=#465457
 highlight TermCursor guifg=#66D9EF
 highlight TermCursorNC guifg=#FFFFFF
 
+function! <SID>HaskellSettings()
+  map <silent> <LocalLeader>gi :GhcModInfo<cr>
+  map <silent> <LocalLeader>gt :GhcModType<cr>
+  map <silent> <LocalLeader>gc :GhcModSplitFunCase<cr>
+
+  nnoremap <silent> <C-l> :noh<CR>:GhcModTypeClear<CR><C-l>
+endfunction
+
 au BufNewFile,BufRead *.dump-stg,*.dump-simpl setf haskell
-au BufNewFile,BufRead *.purs setf haskell
 au BufNewFile,BufRead *.dump-cmm,*.dump-opt-cmm setf c
 au BufNewFile,BufRead *.dump-asm setf asm
 au BufNewFile,BufRead *.d setf dtrace
 au BufNewFile,BufRead *.agda setf agda
-au TermOpen term://* setlocal number | setlocal relativenumber | setlocal nolist | setlocal numberwidth=5 | setlocal nocursorline
+au BufNewFile,BufRead *.agda setf agda
+au BufNewFile,BufRead *.hs call <SID>HaskellSettings()
+" au TermOpen term://* setlocal number | setlocal relativenumber | setlocal nolist | setlocal numberwidth=5 | setlocal nocursorline
+au TermOpen term://* setlocal nolist | setlocal numberwidth=5 | setlocal nocursorline
 au InsertEnter * set nocursorline
 au InsertLeave * set cursorline
 au vimenter * if !argc() | NERDTree | endif
