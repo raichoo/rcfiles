@@ -40,8 +40,6 @@ call plug#end()
 
 filetype plugin indent on
 
-syntax on
-
 let mapleader="ö"
 let maplocalleader="\\"
 
@@ -121,12 +119,9 @@ set showcmd
 set noshowmode
 set shiftwidth=2
 set tabstop=2
-set backspace=2
 set relativenumber
 set number
-set encoding=utf-8
 set expandtab
-set smarttab
 set cmdheight=1
 set laststatus=2
 set cursorline
