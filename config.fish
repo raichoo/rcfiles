@@ -29,6 +29,12 @@ function start_vi
   end
 end
 
+function rebuild_haskell_tags
+  if test -e .stack-work
+    hasktags --ignore-close-implementation --ctags .; sort tags
+  end
+end
+
 alias vi=start_vi
 alias vim=start_vi
 

@@ -134,23 +134,35 @@ set noswapfile
 set list
 set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮,nbsp:·
 set wrap
-set formatoptions+=jc
 set textwidth=80
 
 colorscheme molokai
-
+highlight Normal guifg=White guibg=None
 highlight MatchParen guibg=bg guifg=#FD971F gui=Bold
 highlight VertSplit guifg=#465457 guibg=#465457
 highlight StatusLineNC guifg=#465457 guibg=#465457
 highlight TermCursor guifg=#66D9EF
 highlight TermCursorNC guifg=#FFFFFF
 
-function! <SID>HaskellSettings()
-  map <silent> <LocalLeader>gi :GhcModInfo<cr>
-  map <silent> <LocalLeader>gt :GhcModType<cr>
-  map <silent> <LocalLeader>gc :GhcModSplitFunCase<cr>
+let g:haskell_rebuild_tags = 0
+function! s:HaskellRebuildTagsFinished()
+  let g:haskell_rebuild_tags = 0
+endfunction
+let s:HaskellTagsHandler = {
+      \ 'on_exit': function('s:HaskellRebuildTagsFinished')
+      \ }
+function! HaskellRebuildTags()
+  if g:haskell_rebuild_tags == 0
+    let g:haskell_rebuild_tags = jobstart("rebuild_haskell_tags", s:HaskellTagsHandler)
+  endif
+endfunction
 
-  nnoremap <silent> <C-l> :noh<CR>:GhcModTypeClear<CR><C-l>
+function! HaskellSettings()
+  map <buffer> <silent> <LocalLeader>gi :GhcModInfo<cr>
+  map <buffer> <silent> <LocalLeader>gt :GhcModType<cr>
+  map <buffer> <silent> <LocalLeader>gc :GhcModSplitFunCase<cr>
+
+  nnoremap <buffer> <silent> <C-l> :noh<CR>:GhcModTypeClear<CR><C-l>
 endfunction
 
 au BufNewFile,BufRead *.dump-stg,*.dump-simpl setf haskell
@@ -159,7 +171,8 @@ au BufNewFile,BufRead *.dump-asm setf asm
 au BufNewFile,BufRead *.d setf dtrace
 au BufNewFile,BufRead *.agda setf agda
 au BufNewFile,BufRead *.agda setf agda
-au BufNewFile,BufRead *.hs call <SID>HaskellSettings()
+au BufNewFile,BufRead *.hs call HaskellSettings()
+au BufWritePost *.hs call HaskellRebuildTags()
 " au TermOpen term://* setlocal number | setlocal relativenumber | setlocal nolist | setlocal numberwidth=5 | setlocal nocursorline
 au TermOpen term://* setlocal nolist | setlocal numberwidth=5 | setlocal nocursorline
 au InsertEnter * set nocursorline
