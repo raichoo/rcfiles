@@ -2,6 +2,8 @@ call plug#begin('~/.nvim/plugged')
 
 "colors
 Plug 'tomasr/molokai'
+Plug 'joshdick/onedark.vim'
+Plug 'raichoo/monodark'
 
 " fzf
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -136,13 +138,7 @@ set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮,nbsp:·
 set wrap
 set textwidth=80
 
-colorscheme molokai
-highlight Normal guifg=White guibg=None
-highlight MatchParen guibg=bg guifg=#FD971F gui=Bold
-highlight VertSplit guifg=#465457 guibg=#465457
-highlight StatusLineNC guifg=#465457 guibg=#465457
-highlight TermCursor guifg=#66D9EF
-highlight TermCursorNC guifg=#FFFFFF
+colorscheme monodark
 
 let g:haskell_rebuild_tags = 0
 function! s:HaskellRebuildTagsFinished()
