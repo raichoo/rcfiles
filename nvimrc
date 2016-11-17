@@ -107,6 +107,8 @@ cnoremap <M-b> <nop>
 cnoremap <M-f> <nop>
 
 set termguicolors
+set inccommand=nosplit
+set visualbell t_bv=
 set cedit=<C-f>
 set clipboard=unnamedplus
 set mouse=nv
@@ -137,6 +139,7 @@ set list
 set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮,nbsp:·
 set wrap
 set textwidth=80
+set shortmess+=I
 
 colorscheme monodark
 
@@ -173,8 +176,8 @@ au BufWritePost *.hs call HaskellRebuildTags()
 au TermOpen term://* setlocal nolist | setlocal numberwidth=5 | setlocal nocursorline
 au InsertEnter * set nocursorline
 au InsertLeave * set cursorline
-au vimenter * if !argc() | NERDTree | endif
-au bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+" au vimenter * if !argc() | NERDTree | endif
+" au bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 au BufReadPost fugitive://* set bufhidden=delete
 
 let NERDTreeMinimalUI = 1
@@ -185,6 +188,8 @@ let g:haskell_enable_quantification = 1
 "let g:haskell_enable_static_pointers = 1
 let g:haskell_enable_typeroles = 1
 let g:haskell_enable_pattern_synonyms = 1
+" let g:haskell_classic_highlighting = 1
+let g:haskell_indent_case_alternative = 1
 
 highlight ghcmodType guifg=white guibg=green
 let g:ghcmod_type_highlight = 'ghcmodType'
@@ -195,6 +200,9 @@ let g:agda_extraincpaths = ["/home/raichoo/Sources/agda-stdlib/src"]
 
 let g:deoplete#enable_at_startup = 1
 
+let g:monodark_disable_background = 1
+
+" let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_tabs = 1
 let g:airline#extensions#tabline#show_buffers = 0
