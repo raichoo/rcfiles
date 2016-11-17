@@ -3,12 +3,11 @@
 
 # setup paths
 
-fish_vi_key_bindings
-
 if test "$NVIM_LISTEN_ADDRESS" = ""
   set PATH /home/raichoo/Local/bin /home/raichoo/.local/bin $PATH
   set MANPATH /home/raichoo/Local/man /usr/share/man $MANPATH
   set PYTHONPATH /home/raichoo/.local/lib/python3.5/site-packages /home/raichoo/Local/python/lib/python2.7/site-packages /home/raichoo/Local/z3/lib/python2.7/dist-packages $PYTHONPATH
+  set -x MANPAGER "nvim -c 'set ft=man' -"
 end
 
 set -x __fish_bin_dir /home/raichoo/Local/fish/bin
@@ -17,7 +16,7 @@ set -x PAGER "less -R"
 set -x DARCS_DO_COLOR_LINES 1
 set -x DARCS_ALWAYS_COLOR 1
 set -x JAVA_HOME /usr
-set -x TERM xterm-256color
+set -x TERM gnome-256color
 set -x EDITOR /home/raichoo/Local/bin/nvim
 set -g fish_term24bit 1
 
@@ -67,7 +66,7 @@ function current_mode
 end
 
 function fish_prompt
-  printf "%s%s%s@%s%s%s:%s%s%s%s» " (set_color --bold FD971F) (whoami) (set_color normal) (set_color --bold F92672) (hostname) (set_color normal) (set_color 66D9EF) (pwd_prompt) (set_color normal) (__terlar_git_prompt)
+  printf "%s%s%s@%s%s%s:%s%s%s%s» " (set_color --bold FD971F) (whoami) (set_color normal) (set_color --bold F92672) (hostname) (set_color normal) (set_color 66D9EF) (pwd_prompt) (set_color normal) (__fix_terlar_git_prompt)
 end
 
 function fish_right_prompt
