@@ -1,3 +1,11 @@
+function! EnvSetup() abort
+  if filereadable('stack.yaml')
+    let $PATH = systemlist('stack path --bin-path')[0]
+  endif
+endfunction
+
+call EnvSetup()
+
 call plug#begin('~/.nvim/plugged')
 
 "colors
