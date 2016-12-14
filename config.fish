@@ -2,15 +2,14 @@
 #. /home/raichoo/.opam/opam-init/init.fish > /dev/null 2> /dev/null or true
 
 # setup paths
-
-if test "$NVIM_LISTEN_ADDRESS" = ""
-  set PATH /home/raichoo/Local/bin /home/raichoo/.local/bin $PATH
-  set MANPATH /home/raichoo/Local/man /usr/share/man $MANPATH
-  set PYTHONPATH /home/raichoo/.local/lib/python3.5/site-packages /home/raichoo/Local/python/lib/python2.7/site-packages /home/raichoo/Local/z3/lib/python2.7/dist-packages $PYTHONPATH
-  set -x MANPAGER "nvim -c 'set ft=man' -"
+if status --is-login
+  set -x PATH /home/raichoo/Local/bin /home/raichoo/.local/bin $PATH
+  set -x MANPATH /home/raichoo/Local/man /usr/share/man $MANPATH
+  set -x PYTHONPATH /home/raichoo/.local/lib/python3.5/site-packages /home/raichoo/Local/python/lib/python2.7/site-packages /home/raichoo/Local/z3/lib/python2.7/dist-packages $PYTHONPATH
+  set -x __fish_bin_dir /home/raichoo/Local/fish/bin
 end
 
-set -x __fish_bin_dir /home/raichoo/Local/fish/bin
+set -x MANPAGER "nvim -c 'set ft=man' -"
 set -x BROWSER /usr/bin/firefox
 set -x PAGER "less"
 set -x LESS "-qR"
