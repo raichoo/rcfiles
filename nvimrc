@@ -54,6 +54,7 @@ let mapleader="ö"
 let maplocalleader="\\"
 
 map <silent> <Leader>tr :NERDTreeToggle<cr>
+map <silent> <Leader>tf :NERDTreeFind<cr>
 map <silent> <Leader>lf :Files<cr>
 map <silent> <Leader>ls :Buffers<CR>
 map <silent> <Leader>lm :Marks<CR>
