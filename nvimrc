@@ -62,7 +62,7 @@ map <silent> <Leader>lw :Windows<CR>
 map <silent> <Leader>nm :Neomake<cr>
 map Y y$
 
-function! <SID>FixWhitespaces()
+function! <SID>FixWhitespaces() abort
   let l:search = @/
   let l:l = line('.')
   let l:c = col('.')
@@ -153,19 +153,20 @@ set shortmess+=I
 colorscheme monodark
 
 let g:haskell_rebuild_tags = 0
-function! s:HaskellRebuildTagsFinished()
+function! s:HaskellRebuildTagsFinished(job_id, data, event) abort
   let g:haskell_rebuild_tags = 0
 endfunction
 let s:HaskellTagsHandler = {
       \ 'on_exit': function('s:HaskellRebuildTagsFinished')
       \ }
-function! HaskellRebuildTags()
-  if g:haskell_rebuild_tags == 0
-    let g:haskell_rebuild_tags = jobstart("rebuild_haskell_tags", s:HaskellTagsHandler)
+function! HaskellRebuildTags() abort
+  if g:haskell_rebuild_tags == 0 && filereadable('stack.yaml')
+    let l:cmd = 'hasktags --ignore-close-implementation --ctags .; sort tags'
+    let g:haskell_rebuild_tags = jobstart(l:cmd, s:HaskellTagsHandler)
   endif
 endfunction
 
-function! HaskellSettings()
+function! HaskellSettings() abort
   map <buffer> <silent> <LocalLeader>gi :GhcModInfo<cr>
   map <buffer> <silent> <LocalLeader>gt :GhcModType<cr>
   map <buffer> <silent> <LocalLeader>gc :GhcModSplitFunCase<cr>
@@ -185,8 +186,6 @@ au BufWritePost *.hs call HaskellRebuildTags()
 au TermOpen term://* setlocal nolist | setlocal numberwidth=5 | setlocal nocursorline
 au InsertEnter * set nocursorline
 au InsertLeave * set cursorline
-" au vimenter * if !argc() | NERDTree | endif
-" au bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 au BufReadPost fugitive://* set bufhidden=delete
 
 let NERDTreeMinimalUI = 1
