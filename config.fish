@@ -12,7 +12,8 @@ end
 
 set -x __fish_bin_dir /home/raichoo/Local/fish/bin
 set -x BROWSER /usr/bin/firefox
-set -x PAGER "less -R"
+set -x PAGER "less"
+set -x LESS "-qR"
 set -x DARCS_DO_COLOR_LINES 1
 set -x DARCS_ALWAYS_COLOR 1
 set -x JAVA_HOME /usr
