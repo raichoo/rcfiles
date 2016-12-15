@@ -9,6 +9,10 @@ if status --is-login
   set -x __fish_bin_dir /home/raichoo/Local/fish/bin
 end
 
+if set -q STACK_PROJECT_ROOT; and test "$STACK_PROJECT_ROOT" != $PWD; and test -e "stack.yaml"
+  eval "set -x PATH "(stack exec printenv PATH | tr ':' ' ')" 2> /dev/null"
+end
+
 set -x MANPAGER "nvim -c 'set ft=man' -"
 set -x BROWSER /usr/bin/firefox
 set -x PAGER "less"
