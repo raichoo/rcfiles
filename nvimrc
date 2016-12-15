@@ -120,7 +120,7 @@ set termguicolors
 set inccommand=nosplit
 set visualbell t_bv=
 set cedit=<C-f>
-set clipboard=unnamedplus
+set clipboard=unnamed,unnamedplus
 set mouse=nv
 set hlsearch
 "set ignorecase
