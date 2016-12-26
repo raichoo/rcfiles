@@ -69,7 +69,7 @@ function fish_right_prompt
   set -l _status $status
   echo -n "⟦"
   if test $_status = 0
-    set_color --bold A6E22E
+    set_color --bold B8E673
   else
     set_color --bold EF5939
   end
