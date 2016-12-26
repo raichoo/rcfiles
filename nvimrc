@@ -1,6 +1,7 @@
 function! EnvSetup() abort
   if filereadable('stack.yaml')
     let $STACK_PROJECT_ROOT = $PWD
+    let $GHC_PACKAGE_PATH = systemlist('stack exec printenv GHC_PACKAGE_PATH')[0]
     let $PATH = systemlist('stack exec printenv PATH')[0]
   endif
 endfunction
