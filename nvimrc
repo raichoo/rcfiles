@@ -11,42 +11,33 @@ call EnvSetup()
 call plug#begin('~/.nvim/plugged')
 
 "colors
-Plug 'tomasr/molokai'
-Plug 'joshdick/onedark.vim'
 Plug 'raichoo/monodark'
 
 " fzf
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
-Plug 'Shougo/vimproc.vim', {'do': 'make -f  make_unix.mak'}
 Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-repeat'
-Plug 'Shougo/deoplete.nvim'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'godlygeek/tabular'
-Plug 'derekwyatt/vim-scala'
 Plug 'benekastah/neomake'
-Plug 'derekelkins/agda-vim'
-Plug 'leafgarland/typescript-vim'
 Plug 'michaeljsmith/vim-indent-object'
-Plug 'idris-hackers/idris-vim'
 Plug 'dag/vim-fish'
 Plug 'raichoo/smt-vim'
 Plug 'rust-lang/rust.vim'
 Plug 'raichoo/purescript-vim'
+Plug 'takac/vim-hardtime'
 
 "haskell
 Plug 'neovimhaskell/haskell-vim'
 Plug 'pbrisbin/vim-syntax-shakespeare'
 Plug 'eagletmt/neco-ghc'
-Plug 'eagletmt/ghcmod-vim'
-Plug 'raichoo/ghcid-neovim'
 
 call plug#end()
 
@@ -64,7 +55,7 @@ map <silent> <Leader>lw :Windows<CR>
 map <silent> <Leader>nm :Neomake<cr>
 map Y y$
 
-function! <SID>FixWhitespaces() abort
+function! FixWhitespaces() abort
   let l:search = @/
   let l:l = line('.')
   let l:c = col('.')
@@ -76,8 +67,9 @@ function! <SID>FixWhitespaces() abort
 endfunction
 
 autocmd! User FzfStatusLine setlocal statusline=%#airline_z#\ FZF\ %#airline_a_to_airline_b#>%#airline_x_inactive#>
-command! FixWhitespaces call <SID>FixWhitespaces()
+command! FixWhitespaces call FixWhitespaces()
 
+tnoremap <C-l> <C-\><C-n>
 nnoremap <expr> j v:count ? 'j' : 'gj'
 nnoremap <expr> k v:count ? 'k' : 'gk'
 vnoremap <expr> j v:count ? 'j' : 'gj'
@@ -97,15 +89,25 @@ inoremap <Right> <nop>
 inoremap <PageUp> <nop>
 inoremap <PageDown> <nop>
 
+function! HighlightSearch(word) abort
+  let l:w = expand('<cword>')
+
+  if a:word
+    let @/ = '\<' . l:w . '\>'
+  else
+    let @/ = l:w
+  endif
+endfunction
+
 nnoremap <silent> <C-l> :noh<CR><C-l>
-nnoremap * *N
-nnoremap # #N
-nnoremap g* g*N
-nnoremap g# g#N
-vnoremap * *N
-vnoremap # #N
-vnoremap g* g*N
-vnoremap g# g#N
+nnoremap <silent> * :call HighlightSearch(1)<CR>:let v:searchforward=1<CR>:set hlsearch<CR>
+nnoremap <silent> # :call HighlightSearch(1)<CR>:let v:searchforward=0<CR>:set hlsearch<CR>
+nnoremap <silent> g* :call HighlightSearch(0)<CR>:let v:searchforward=1<CR>:set hlsearch<CR>
+nnoremap <silent> g# :call HighlightSearch(0)<CR>:let v:searchforward=0<CR>:set hlsearch<CR>
+vnoremap <silent> * :call HighlightSearch(1)<CR>:let v:searchforward=1<CR>:set hlsearch<CR>
+vnoremap <silent> # :call HighlightSearch(1)<CR>:let v:searchforward=0<CR>:set hlsearch<CR>
+vnoremap <silent> g* :call HighlightSearch(0)<CR>:let v:searchforward=1<CR>:set hlsearch<CR>
+vnoremap <silent> g# :call HighlightSearch(0)<CR>:let v:searchforward=1<CR>:set hlsearch<CR>
 nnoremap <silent> <Tab> :next<CR>
 nnoremap <silent> <S-Tab> :previous<CR>
 
@@ -118,7 +120,11 @@ cnoremap <M-b> <nop>
 cnoremap <M-f> <nop>
 
 set termguicolors
+set nojoinspaces
+set splitright
 set inccommand=nosplit
+set noerrorbells
+set novisualbell
 set visualbell t_bv=
 set cedit=<C-f>
 set clipboard=unnamed,unnamedplus
@@ -134,8 +140,7 @@ set showcmd
 set noshowmode
 set shiftwidth=2
 set tabstop=2
-set relativenumber
-set number
+set relativenumber number
 set expandtab
 set cmdheight=1
 set laststatus=2
@@ -154,40 +159,32 @@ set shortmess+=I
 
 colorscheme monodark
 
-let g:haskell_rebuild_tags = 0
-function! s:HaskellRebuildTagsFinished(job_id, data, event) abort
+if !exists('g:haskell_rebuild_tags')
+  let g:haskell_rebuild_tags = 0
+endif
+
+function! HaskellRebuildTagsFinished(job_id, data, event) abort
   let g:haskell_rebuild_tags = 0
 endfunction
-let s:HaskellTagsHandler = {
-      \ 'on_exit': function('s:HaskellRebuildTagsFinished')
+
+let g:HaskellTagsHandler = {
+      \ 'on_exit': function('HaskellRebuildTagsFinished')
       \ }
+
 function! HaskellRebuildTags() abort
   if g:haskell_rebuild_tags == 0 && filereadable('stack.yaml')
     let l:cmd = 'hasktags --ignore-close-implementation --ctags .; sort tags'
-    let g:haskell_rebuild_tags = jobstart(l:cmd, s:HaskellTagsHandler)
+    let g:haskell_rebuild_tags = jobstart(l:cmd, g:HaskellTagsHandler)
   endif
-endfunction
-
-function! HaskellSettings() abort
-  map <buffer> <silent> <LocalLeader>gi :GhcModInfo<cr>
-  map <buffer> <silent> <LocalLeader>gt :GhcModType<cr>
-  map <buffer> <silent> <LocalLeader>gc :GhcModSplitFunCase<cr>
-
-  nnoremap <buffer> <silent> <C-l> :noh<CR>:GhcModTypeClear<CR><C-l>
 endfunction
 
 au BufNewFile,BufRead *.dump-stg,*.dump-simpl setf haskell
 au BufNewFile,BufRead *.dump-cmm,*.dump-opt-cmm setf c
 au BufNewFile,BufRead *.dump-asm setf asm
-au BufNewFile,BufRead *.d setf dtrace
-au BufNewFile,BufRead *.agda setf agda
-au BufNewFile,BufRead *.agda setf agda
-au BufNewFile,BufRead *.hs call HaskellSettings()
 au BufWritePost *.hs call HaskellRebuildTags()
-" au TermOpen term://* setlocal number | setlocal relativenumber | setlocal nolist | setlocal numberwidth=5 | setlocal nocursorline
 au TermOpen term://* setlocal nolist | setlocal numberwidth=5 | setlocal nocursorline
-au InsertEnter * set nocursorline
-au InsertLeave * set cursorline
+au InsertEnter,WinEnter * set nocursorline
+au InsertLeave,WinEnter * set cursorline
 au BufReadPost fugitive://* set bufhidden=delete
 
 let NERDTreeMinimalUI = 1
@@ -201,18 +198,14 @@ let g:haskell_enable_pattern_synonyms = 1
 " let g:haskell_classic_highlighting = 1
 let g:haskell_indent_case_alternative = 1
 
-highlight ghcmodType guifg=white guibg=green
-let g:ghcmod_type_highlight = 'ghcmodType'
-
 let g:hamlet_prevent_invalid_nesting = 0
-
-let g:agda_extraincpaths = ["/home/raichoo/Sources/agda-stdlib/src"]
 
 let g:deoplete#enable_at_startup = 1
 
 let g:monodark_disable_background = 1
 
 " let g:airline_powerline_fonts = 1
+let g:airline_extensions = ['tabline']
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_tabs = 1
 let g:airline#extensions#tabline#show_buffers = 0
@@ -221,3 +214,16 @@ let g:airline#extensions#tabline#left_sep = '>'
 let g:airline#extensions#tabline#left_alt_sep = '>'
 let g:airline#extensions#tabline#show_close_button = 0
 let g:airline#extensions#tabline#show_tab_type = 0
+let g:airline#extensions#tabline#buffer_idx_mode = 1
+
+nmap <leader>1 <Plug>AirlineSelectTab1
+nmap <leader>2 <Plug>AirlineSelectTab2
+nmap <leader>3 <Plug>AirlineSelectTab3
+nmap <leader>4 <Plug>AirlineSelectTab4
+nmap <leader>5 <Plug>AirlineSelectTab5
+nmap <leader>6 <Plug>AirlineSelectTab6
+nmap <leader>7 <Plug>AirlineSelectTab7
+nmap <leader>8 <Plug>AirlineSelectTab8
+nmap <leader>9 <Plug>AirlineSelectTab9
+
+let g:hardtime_default_on = 1
