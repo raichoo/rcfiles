@@ -95,6 +95,7 @@ inoremap <Left> <nop>
 inoremap <Right> <nop>
 inoremap <PageUp> <nop>
 inoremap <PageDown> <nop>
+inoremap <C-l> <Esc>
 
 function! HighlightSearch(word) abort
   let l:w = expand('<cword>')
