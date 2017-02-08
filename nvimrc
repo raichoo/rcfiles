@@ -213,7 +213,7 @@ let g:deoplete#enable_at_startup = 1
 let g:monodark_disable_background = 1
 
 " let g:airline_powerline_fonts = 1
-let g:airline_extensions = ['tabline']
+let g:airline_extensions = ['whitespace', 'tabline']
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_tabs = 1
 let g:airline#extensions#tabline#show_buffers = 0
