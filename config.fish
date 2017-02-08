@@ -5,7 +5,7 @@
 if status --is-login
   set -x PATH /home/raichoo/Local/bin /home/raichoo/.local/bin $PATH
   set -x MANPATH /home/raichoo/Local/man /usr/share/man $MANPATH
-  set -x PYTHONPATH /home/raichoo/.local/lib/python3.5/site-packages /home/raichoo/Local/python/lib/python2.7/site-packages /home/raichoo/Local/z3/lib/python2.7/dist-packages $PYTHONPATH
+  set -x PYTHONPATH /home/raichoo/.local/lib/python3.6/site-packages /home/raichoo/Local/python/lib/python2.7/site-packages /home/raichoo/Local/z3/lib/python2.7/dist-packages $PYTHONPATH
   set -x __fish_bin_dir /home/raichoo/Local/fish/bin
 end
 
