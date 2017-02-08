@@ -18,7 +18,7 @@ Plug 'raichoo/monodark'
 " fzf
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-
+" Plug 'w0rp/ale'
 Plug 'vim-airline/vim-airline'
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-commentary'
@@ -32,14 +32,19 @@ Plug 'benekastah/neomake'
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'dag/vim-fish'
 Plug 'raichoo/smt-vim'
-Plug 'rust-lang/rust.vim'
 Plug 'raichoo/purescript-vim'
+" Plug 'mbbill/undotree'
 Plug 'takac/vim-hardtime'
 
 "haskell
 Plug 'neovimhaskell/haskell-vim'
 Plug 'pbrisbin/vim-syntax-shakespeare'
 Plug 'eagletmt/neco-ghc'
+
+
+"rust
+Plug 'rust-lang/rust.vim'
+" Plug 'racer-rust/vim-racer'
 
 call plug#end()
 
