@@ -1,3 +1,5 @@
+let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 0
+
 function! EnvSetup() abort
   if filereadable('stack.yaml')
     let $STACK_PROJECT_ROOT = $PWD
