@@ -58,6 +58,9 @@ function current_mode
     case visual
       set_color --bold FD971F
       echo -n "VISUAL"
+    case replace-one
+      set_color --bold EF5939
+      echo -n "REPLACE"
   end
   set_color normal
   echo -n "⟧"
