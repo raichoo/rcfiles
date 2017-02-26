@@ -56,11 +56,14 @@ let maplocalleader="\\"
 map <silent> <Leader>tr :NERDTreeToggle<cr>
 map <silent> <Leader>tf :NERDTreeFind<cr>
 map <silent> <Leader>lf :Files<cr>
+map <silent> <Leader>lg :GFiles<cr>
 map <silent> <Leader>ls :Buffers<CR>
 map <silent> <Leader>lm :Marks<CR>
 map <silent> <Leader>lw :Windows<CR>
 map <silent> <Leader>nm :Neomake<cr>
+
 map Y y$
+map <silent> <C-w>z :execute 'resize ' . line('$')<CR>
 
 function! FixWhitespaces() abort
   let l:search = @/
