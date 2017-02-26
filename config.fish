@@ -26,6 +26,26 @@ set -x TERM gnome-256color
 set -x EDITOR /home/raichoo/Local/bin/nvim
 set -g fish_term24bit 1
 
+set -g __fish_git_prompt_show_informative_status 1
+set -g __fish_git_prompt_hide_untrackedfiles 1
+
+set -g __fish_git_prompt_color_branch yellow
+set -g __fish_git_prompt_showupstream "informative"
+set -g __fish_git_prompt_char_upstream_ahead "↑"
+set -g __fish_git_prompt_char_upstream_behind "↓"
+set -g __fish_git_prompt_char_upstream_prefix ""
+
+set -g __fish_git_prompt_char_stagedstate "●"
+set -g __fish_git_prompt_char_dirtystate "✚"
+set -g __fish_git_prompt_char_untrackedfiles "…"
+set -g __fish_git_prompt_char_conflictedstate "✖"
+set -g __fish_git_prompt_char_cleanstate "✔"
+
+set -g __fish_git_prompt_color_dirtystate red
+set -g __fish_git_prompt_color_stagedstate yellow
+set -g __fish_git_prompt_color_invalidstate red
+set -g __fish_git_prompt_color_untrackedfiles red
+set -g __fish_git_prompt_color_cleanstate green
 function print_color
   printf "\x1b[38;2;%d;%d;%dm%d %d %d\x1b[0m\n" $argv[1] $argv[2] $argv[3] $argv[1] $argv[2] $argv[3]
 end
@@ -67,7 +87,7 @@ function current_mode
 end
 
 function fish_prompt
-  printf "%s%s%s@%s%s%s:%s%s%s%s» " (set_color --bold FD971F) (whoami) (set_color normal) (set_color --bold F92672) (hostname) (set_color normal) (set_color 66D9EF) (pwd_prompt) (set_color normal) (__fix_terlar_git_prompt)
+  printf "%s%s%s@%s%s%s:%s%s%s%s» " (set_color --bold FD971F) (whoami) (set_color normal) (set_color --bold F92672) (hostname) (set_color normal) (set_color 66D9EF) (pwd_prompt) (set_color normal) (__fish_git_prompt)
 end
 
 function fish_right_prompt
