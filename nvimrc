@@ -39,6 +39,7 @@ let mapleader="ö"
 let maplocalleader="\\"
 
 if isdirectory('.git')
+  set grepprg=git\ grep\ --no-color\ --line-number
   map <silent> <Leader>lf :GFiles --others --cached --exclude-standard<cr>
 else
 map <silent> <Leader>lf :Files<cr>
