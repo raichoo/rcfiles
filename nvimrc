@@ -112,14 +112,6 @@ vnoremap <silent> g# :call HighlightSearch(0)<CR>:let v:searchforward=1<CR>:set 
 
 nnoremap <silent> <C-l> :noh<CR><C-l>
 
-cnoremap <C-a> <nop>
-cnoremap <C-e> <nop>
-cnoremap <C-p> <nop>
-cnoremap <C-n> <nop>
-cnoremap <C-b> <nop>
-cnoremap <M-b> <nop>
-cnoremap <M-f> <nop>
-
 set termguicolors
 set nojoinspaces
 set splitright
