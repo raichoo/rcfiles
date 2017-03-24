@@ -161,6 +161,8 @@ set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮,nbsp:⊙
 set wrap
 set textwidth=80
 set shortmess+=I
+set grepprg=rg\ --vimgrep\ --no-heading
+set grepformat=%f:%l:%c:%m,%f:%l:%m
 
 colorscheme monodark
 
