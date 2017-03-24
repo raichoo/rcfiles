@@ -32,6 +32,8 @@ Plug 'tpope/vim-fugitive'
 
 call plug#end()
 
+source ~/.nvim/haskell.vim
+
 filetype plugin indent on
 
 function! Rename(file) abort
@@ -39,15 +41,6 @@ function! Rename(file) abort
   execute 'saveas ' . a:file . ' | ' . 'bd! # | !rm ' . l:f
 endfunction
 command! -complete=file -nargs=1 Rename call Rename(<f-args>)
-
-function! SetupVim() abort
-  if filereadable('stack.yaml')
-    call HaskellSetup()
-  else
-    call deoplete#initialize()
-    call deoplete#enable()
-  endif
-endfunction
 
 function! FixWhitespaces() abort
   let l:search = @/
@@ -70,8 +63,6 @@ function! HighlightSearch(word) abort
     let @/ = l:w
   endif
 endfunction
-
-source ~/.nvim/haskell.vim
 
 let mapleader="ö"
 
@@ -177,7 +168,11 @@ augroup commands
   au!
   au InsertEnter,WinEnter * set nocursorline
   au InsertLeave,WinEnter * set cursorline
-  au VimEnter * call SetupVim()
+  if filereadable('stack.yaml')
+    au VimEnter * call HaskellSetup()
+  else
+    let g:deoplete#enable_at_startup = 1
+  endif
 augroup end
 
 autocmd! User FzfStatusLine setlocal statusline=%#airline_z#\ FZF\ %#airline_a_to_airline_b#>%#airline_x_inactive#>

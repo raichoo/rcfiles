@@ -109,11 +109,6 @@ function! s:HaskellSettings() abort
   endif
 endfunction
 
-function! HaskellSetup() abort
-  let $STACK_PROJECT_ROOT = $PWD
-  call jobstart('stack exec printenv PATH', s:HaskellEnvHandler)
-endfunction
-
 augroup haskell_commands
   au!
   au BufNewFile *.hs call s:HaskellSkel() | call s:HaskellSettings()
