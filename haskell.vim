@@ -55,15 +55,13 @@ let s:HaskellGhcModHandler = {
 
 " Setup GHC_PACKAGE_PATH
 function! s:HaskellPackagePath(job_id, data, event) abort
-  if a:event is# 'stdout'
-    let $GHC_PACKAGE_PATH = a:data[0]
-    echomsg 'haskell: GHC_PACKAGE_PATH set'
-    if exepath('ghc-mod') is# expand('$HOME') . '/.local/bin/ghc-mod' || !executable('ghc-mod')
-      echomsg 'haskell: installing ghc-mod'
-      call jobstart('stack build ghc-mod', s:HaskellGhcModHandler)
-    else
-      call s:HaskellGhcModDone(0)
-    endif
+  let $GHC_PACKAGE_PATH = a:data[0]
+  echomsg 'haskell: GHC_PACKAGE_PATH set'
+  if exepath('ghc-mod') is# expand('$HOME') . '/.local/bin/ghc-mod' || !executable('ghc-mod')
+    echomsg 'haskell: installing ghc-mod'
+    call jobstart('stack build ghc-mod', s:HaskellGhcModHandler)
+  else
+    call s:HaskellGhcModDone(0)
   endif
 endfunction
 let s:HaskellPackagePathHandler = {
@@ -72,11 +70,9 @@ let s:HaskellPackagePathHandler = {
 
 " Setup PATH
 function! s:HaskellPath(job_id, data, event) abort
-  if a:event is# 'stdout'
-    let $PATH = a:data[0]
-    echomsg 'haskell: PATH set'
-    call jobstart('stack exec printenv GHC_PACKAGE_PATH', s:HaskellPackagePathHandler)
-  endif
+  let $PATH = a:data[0]
+  echomsg 'haskell: PATH set'
+  call jobstart('stack exec printenv GHC_PACKAGE_PATH', s:HaskellPackagePathHandler)
 endfunction
 let s:HaskellPathHandler = {
  \ 'on_stdout': function('s:HaskellPath')
