@@ -34,16 +34,16 @@ let s:HaskellTagsHandler = {
 
 " Setup ghc-mod
 function! s:HaskellGhcModDone(msg) abort
-    call deoplete#enable()
-    if a:msg
-      echomsg 'haskell: ghc-mod ready'
-    endif
-    if !executable('hasktags')
-      echomsg 'haskell: installing hasktags'
-      call jobstart('stack build hasktags', s:HaskellTagsHandler)
-    else
-      call s:HaskellTagsDone(0)
-    endif
+  call deoplete#enable()
+  if a:msg
+    echomsg 'haskell: ghc-mod ready'
+  endif
+  if !executable('hasktags')
+    echomsg 'haskell: installing hasktags'
+    call jobstart('stack build hasktags', s:HaskellTagsHandler)
+  else
+    call s:HaskellTagsDone(0)
+  endif
 endfunction!
 
 function! s:HaskellGhcMod(job_id, data, event) abort
