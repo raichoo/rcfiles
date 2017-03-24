@@ -94,8 +94,8 @@ function! s:HaskellSkel() abort
     silent! normal! imodule Main wheremain :: IO ()main = return ()2B
   else
     silent! normal! "%p
-    silent! :s/\v^%([0-9a-z].{-}\/)*(.{-})\.hs/module \1 where/
-    silent! :s/\//./g
+    silent! s/\v^%([0-9a-z].{-}\/)*(.{-})\.hs/module \1 where/
+    silent! s/\//./g
     silent! normal!o
   endif
 endfunction
