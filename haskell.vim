@@ -1,3 +1,4 @@
+" hasktags functions
 function! s:HaskellRebuildTagsFinished(job_id, data, event) abort
   let g:haskell_rebuild_tags = 0
 endfunction
@@ -12,63 +13,82 @@ function! s:HaskellRebuildTags() abort
   endif
 endfunction
 
-function! s:HaskellTagsSetupHandler(job_id, data, event) abort
+" Setup hasktags
+function! s:HaskellTagsDone(msg) abort
   let g:haskell_rebuild_tags = 0
   augroup haskell_tags
     au!
     au BufWritePost *.hs call s:HaskellRebuildTags()
   augroup end
-  echomsg 'haskell: hasktags ready'
+  if a:msg
+    echomsg 'haskell: hasktags ready'
+  endif
 endfunction
-let s:HaskellTagsSetupHandler = {
-  \ 'on_exit': function('s:HaskellTagsSetupHandler')
+
+function! s:HaskellTags(job_id, data, event) abort
+  call s:HaskellTagsDone(1)
+endfunction
+let s:HaskellTagsHandler = {
+  \ 'on_exit': function('s:HaskellTags')
   \ }
 
-function! s:HaskellGhcMod(job_id, data, event) abort
-    call deoplete#initialize()
+" Setup ghc-mod
+function! s:HaskellGhcModDone(msg) abort
     call deoplete#enable()
-    echomsg 'haskell: ghc-mod ready'
+    if a:msg
+      echomsg 'haskell: ghc-mod ready'
+    endif
     if !executable('hasktags')
       echomsg 'haskell: installing hasktags'
-      call jobstart('stack build hasktags', s:HaskellTagsSetupHandler)
+      call jobstart('stack build hasktags', s:HaskellTagsHandler)
     else
-      let g:haskell_rebuild_tags = 0
-      augroup haskell_tags
-        au!
-        au BufWritePost *.hs call s:HaskellRebuildTags()
-      augroup end
+      call s:HaskellTagsDone(0)
     endif
+endfunction!
+
+function! s:HaskellGhcMod(job_id, data, event) abort
+  call s:HaskellGhcModDone(1)
 endfunction
 let s:HaskellGhcModHandler = {
   \ 'on_exit': function('s:HaskellGhcMod')
   \ }
 
-function! s:HaskellPackage(job_id, data, event) abort
+" Setup GHC_PACKAGE_PATH
+function! s:HaskellPackagePath(job_id, data, event) abort
   if a:event is# 'stdout'
     let $GHC_PACKAGE_PATH = a:data[0]
+    echomsg 'haskell: GHC_PACKAGE_PATH set'
     if exepath('ghc-mod') is# expand('$HOME') . '/.local/bin/ghc-mod' || !executable('ghc-mod')
       echomsg 'haskell: installing ghc-mod'
       call jobstart('stack build ghc-mod', s:HaskellGhcModHandler)
     else
-      call deoplete#initialize()
-      call deoplete#enable()
+      call s:HaskellGhcModDone(0)
     endif
   endif
 endfunction
-let s:HaskellPackageHandler = {
- \ 'on_stdout': function('s:HaskellPackage')
+let s:HaskellPackagePathHandler = {
+ \ 'on_stdout': function('s:HaskellPackagePath')
  \ }
 
-function! s:HaskellEnv(job_id, data, event) abort
+" Setup PATH
+function! s:HaskellPath(job_id, data, event) abort
   if a:event is# 'stdout'
     let $PATH = a:data[0]
-    call jobstart('stack exec printenv GHC_PACKAGE_PATH', s:HaskellPackageHandler)
+    echomsg 'haskell: PATH set'
+    call jobstart('stack exec printenv GHC_PACKAGE_PATH', s:HaskellPackagePathHandler)
   endif
 endfunction
-let s:HaskellEnvHandler = {
- \ 'on_stdout': function('s:HaskellEnv')
+let s:HaskellPathHandler = {
+ \ 'on_stdout': function('s:HaskellPath')
  \ }
 
+" initialze haskell environment
+function! HaskellSetup() abort
+  let $STACK_PROJECT_ROOT = $PWD
+  call jobstart('stack exec printenv PATH', s:HaskellPathHandler)
+endfunction
+
+" helper functions
 function! s:HaskellSkel() abort
   if @% is# 'Main.hs'
     silent! normal! imodule Main wheremain :: IO ()main = return ()2B
