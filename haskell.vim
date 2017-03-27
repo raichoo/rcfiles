@@ -56,12 +56,21 @@ let s:HaskellGhcModHandler = {
 function! s:HaskellPackagePath(job_id, data, event) abort
   let $GHC_PACKAGE_PATH = a:data[0]
   echomsg 'haskell: GHC_PACKAGE_PATH set'
-  if !executable('ghc-mod') || exepath('ghc-mod') is# expand('$HOME') . '/.local/bin/ghc-mod'
-    echomsg 'haskell: installing ghc-mod'
-    call jobstart('stack build ghc-mod', s:HaskellGhcModHandler)
-  else
-    call s:HaskellGhcModDone(0)
-  endif
+  function! s:HaskellLazyLoad()
+    autocmd! haskell_lazy_load
+    augroup! haskell_lazy_load
+    if !executable('ghc-mod') || exepath('ghc-mod') is# expand('$HOME') . '/.local/bin/ghc-mod'
+      echomsg 'haskell: installing ghc-mod'
+      call jobstart('stack build ghc-mod', s:HaskellGhcModHandler)
+    else
+      call s:HaskellGhcModDone(0)
+    endif
+  endfunction
+
+  augroup haskell_lazy_load
+    au!
+    au InsertEnter *.hs call s:HaskellLazyLoad()
+  augroup end
 endfunction
 let s:HaskellPackagePathHandler = {
  \ 'on_stdout': function('s:HaskellPackagePath')
