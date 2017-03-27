@@ -79,8 +79,10 @@ let s:HaskellPathHandler = {
 
 " initialze haskell environment
 function! HaskellSetup() abort
-  let $STACK_PROJECT_ROOT = $PWD
-  call jobstart('stack exec printenv PATH', s:HaskellPathHandler)
+  if $STACK_PROJECT_ROOT is# ""
+    let $STACK_PROJECT_ROOT = $PWD
+    call jobstart('stack exec printenv PATH', s:HaskellPathHandler)
+  endif
 endfunction
 
 " helper functions
