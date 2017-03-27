@@ -2,14 +2,14 @@
 function! s:HaskellRebuildTagsFinished(job_id, data, event) abort
   let g:haskell_rebuild_tags = 0
 endfunction
-let s:HaskellTagsHandler = {
+let s:HaskellRebuildTagsFinishedHandler = {
   \ 'on_exit': function('s:HaskellRebuildTagsFinished')
   \ }
 
 function! s:HaskellRebuildTags() abort
   if g:haskell_rebuild_tags == 0 && filereadable('stack.yaml')
     let l:cmd = 'hasktags --ignore-close-implementation --ctags .; sort tags'
-    let g:haskell_rebuild_tags = jobstart(l:cmd, s:HaskellTagsHandler)
+    let g:haskell_rebuild_tags = jobstart(l:cmd, s:HaskellRebuildTagsFinishedHandler)
   endif
 endfunction
 
