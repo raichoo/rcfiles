@@ -7,7 +7,7 @@ let s:HaskellRebuildTagsFinishedHandler = {
   \ }
 
 function! s:HaskellRebuildTags() abort
-  if g:haskell_rebuild_tags == 0 && filereadable('stack.yaml')
+  if !get(g:, 'haskell_rebuild_tags', 0)
     let l:cmd = 'hasktags --ignore-close-implementation --ctags .; sort tags'
     let g:haskell_rebuild_tags = jobstart(l:cmd, s:HaskellRebuildTagsFinishedHandler)
   endif
@@ -15,7 +15,6 @@ endfunction
 
 " Setup hasktags
 function! s:HaskellTagsDone(msg) abort
-  let g:haskell_rebuild_tags = 0
   augroup haskell_tags
     au!
     au BufWritePost *.hs call s:HaskellRebuildTags()
