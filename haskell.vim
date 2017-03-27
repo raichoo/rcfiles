@@ -56,7 +56,7 @@ let s:HaskellGhcModHandler = {
 function! s:HaskellPackagePath(job_id, data, event) abort
   let $GHC_PACKAGE_PATH = a:data[0]
   echomsg 'haskell: GHC_PACKAGE_PATH set'
-  if exepath('ghc-mod') is# expand('$HOME') . '/.local/bin/ghc-mod' || !executable('ghc-mod')
+  if !executable('ghc-mod') || exepath('ghc-mod') is# expand('$HOME') . '/.local/bin/ghc-mod'
     echomsg 'haskell: installing ghc-mod'
     call jobstart('stack build ghc-mod', s:HaskellGhcModHandler)
   else
