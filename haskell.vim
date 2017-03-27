@@ -52,10 +52,11 @@ let s:HaskellGhcModHandler = {
   \ 'on_exit': function('s:HaskellGhcMod')
   \ }
 
-" Setup GHC_PACKAGE_PATH
-function! s:HaskellPackagePath(job_id, data, event) abort
-  let $GHC_PACKAGE_PATH = a:data[0]
-  echomsg 'haskell: GHC_PACKAGE_PATH set'
+" Setup paths
+function! s:HaskellPath(job_id, data, event) abort
+  let $PATH = a:data[0]
+  let $GHC_PACKAGE_PATH = a:data[1]
+  echomsg 'haskell: paths set'
   function! s:HaskellLazyLoad()
     autocmd! haskell_lazy_load
     augroup! haskell_lazy_load
@@ -72,16 +73,6 @@ function! s:HaskellPackagePath(job_id, data, event) abort
     au InsertEnter *.hs call s:HaskellLazyLoad()
   augroup end
 endfunction
-let s:HaskellPackagePathHandler = {
- \ 'on_stdout': function('s:HaskellPackagePath')
- \ }
-
-" Setup PATH
-function! s:HaskellPath(job_id, data, event) abort
-  let $PATH = a:data[0]
-  echomsg 'haskell: PATH set'
-  call jobstart('stack exec printenv GHC_PACKAGE_PATH', s:HaskellPackagePathHandler)
-endfunction
 let s:HaskellPathHandler = {
  \ 'on_stdout': function('s:HaskellPath')
  \ }
@@ -90,7 +81,7 @@ let s:HaskellPathHandler = {
 function! HaskellSetup() abort
   if $STACK_PROJECT_ROOT is# ""
     let $STACK_PROJECT_ROOT = $PWD
-    call jobstart('stack exec printenv PATH', s:HaskellPathHandler)
+    call jobstart('stack exec printenv PATH GHC_PACKAGE_PATH', s:HaskellPathHandler)
   endif
 endfunction
 
