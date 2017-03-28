@@ -1,18 +1,3 @@
-" hasktags functions
-function! s:HaskellRebuildTagsFinished(job_id, data, event) abort
-  let g:haskell_rebuild_tags = 0
-endfunction
-let s:HaskellRebuildTagsFinishedHandler = {
-  \ 'on_exit': function('s:HaskellRebuildTagsFinished')
-  \ }
-
-function! s:HaskellRebuildTags() abort
-  if !get(g:, 'haskell_rebuild_tags', 0)
-    let l:cmd = 'hasktags --ignore-close-implementation --ctags .; sort tags'
-    let g:haskell_rebuild_tags = jobstart(l:cmd, s:HaskellRebuildTagsFinishedHandler)
-  endif
-endfunction
-
 " initialze haskell environment
 function! s:HaskellSetup() abort
   if $STACK_PROJECT_ROOT is# ""
@@ -44,6 +29,21 @@ function! s:HaskellSetup() abort
 
     " Setup hasktags
     function! s:HaskellTagsDone(msg) abort
+      " hasktags functions
+      function! s:HaskellRebuildTagsFinished(job_id, data, event) abort
+        let g:haskell_rebuild_tags = 0
+      endfunction
+      let s:HaskellRebuildTagsFinishedHandler = {
+        \ 'on_exit': function('s:HaskellRebuildTagsFinished')
+        \ }
+
+      function! s:HaskellRebuildTags() abort
+        if !get(g:, 'haskell_rebuild_tags', 0)
+          let l:cmd = 'hasktags --ignore-close-implementation --ctags .; sort tags'
+          let g:haskell_rebuild_tags = jobstart(l:cmd, s:HaskellRebuildTagsFinishedHandler)
+        endif
+      endfunction
+
       augroup haskell_tags
         au!
         au BufWritePost *.hs call s:HaskellRebuildTags()
