@@ -170,11 +170,6 @@ augroup commands
   au!
   au InsertEnter,WinEnter * set nocursorline
   au InsertLeave,WinEnter * set cursorline
-  if filereadable('stack.yaml')
-    au VimEnter * call HaskellSetup()
-  else
-    let g:deoplete#enable_at_startup = 1
-  endif
 augroup end
 
 autocmd! User FzfStatusLine setlocal statusline=%#airline_z#\ FZF\ %#airline_a_to_airline_b#>%#airline_x_inactive#>

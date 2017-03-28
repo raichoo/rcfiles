@@ -13,74 +13,100 @@ function! s:HaskellRebuildTags() abort
   endif
 endfunction
 
-" Setup hasktags
-function! s:HaskellTagsDone(msg) abort
-  augroup haskell_tags
-    au!
-    au BufWritePost *.hs call s:HaskellRebuildTags()
-  augroup end
-  if a:msg
-    echomsg 'haskell: hasktags ready'
-  endif
-endfunction
-
-function! s:HaskellTags(job_id, data, event) abort
-  call s:HaskellTagsDone(1)
-endfunction
-let s:HaskellTagsHandler = {
-  \ 'on_exit': function('s:HaskellTags')
-  \ }
-
-" Setup ghc-mod
-function! s:HaskellGhcModDone(msg) abort
-  call deoplete#enable()
-  if a:msg
-    echomsg 'haskell: ghc-mod ready'
-  endif
-  if !executable('hasktags')
-    echomsg 'haskell: installing hasktags'
-    call jobstart('stack build hasktags', s:HaskellTagsHandler)
-  else
-    call s:HaskellTagsDone(0)
-  endif
-endfunction!
-
-function! s:HaskellGhcMod(job_id, data, event) abort
-  call s:HaskellGhcModDone(1)
-endfunction
-let s:HaskellGhcModHandler = {
-  \ 'on_exit': function('s:HaskellGhcMod')
-  \ }
-
-" Setup paths
-function! s:HaskellPath(job_id, data, event) abort
-  let $PATH = a:data[0]
-  let $GHC_PACKAGE_PATH = a:data[1]
-  echomsg 'haskell: paths set'
-  function! s:HaskellLazyLoad()
-    autocmd! haskell_lazy_load
-    augroup! haskell_lazy_load
-    if !executable('ghc-mod') || exepath('ghc-mod') is# expand('$HOME') . '/.local/bin/ghc-mod'
-      echomsg 'haskell: installing ghc-mod'
-      call jobstart('stack build ghc-mod', s:HaskellGhcModHandler)
-    else
-      call s:HaskellGhcModDone(0)
-    endif
-  endfunction
-
-  augroup haskell_lazy_load
-    au!
-    au InsertEnter *.hs call s:HaskellLazyLoad()
-  augroup end
-endfunction
-let s:HaskellPathHandler = {
- \ 'on_stdout': function('s:HaskellPath')
- \ }
-
 " initialze haskell environment
-function! HaskellSetup() abort
+function! s:HaskellSetup() abort
   if $STACK_PROJECT_ROOT is# ""
     let $STACK_PROJECT_ROOT = $PWD
+
+    " Teardown
+    function! s:HaskellCleanup()
+      autocmd! haskell_cleanup
+      augroup! haskell_cleanup
+
+      delfunction s:HaskellDone
+      delfunction s:HaskellTagsDone
+      delfunction s:HaskellTags
+      delfunction s:HaskellGhcModDone
+      delfunction s:HaskellGhcMod
+      delfunction s:HaskellPath
+
+      unlet s:HaskellTagsHandler
+      unlet s:HaskellGhcModHandler
+      unlet s:HaskellPathHandler
+    endfunction
+
+    function! s:HaskellDone() abort
+      augroup haskell_cleanup
+        au!
+        au InsertLeave *.hs call s:HaskellCleanup() | delfunction s:HaskellCleanup
+      augroup end
+    endfunction
+
+    " Setup hasktags
+    function! s:HaskellTagsDone(msg) abort
+      augroup haskell_tags
+        au!
+        au BufWritePost *.hs call s:HaskellRebuildTags()
+      augroup end
+      if a:msg
+        echomsg 'haskell: hasktags ready'
+      endif
+      call s:HaskellDone()
+    endfunction
+
+    function! s:HaskellTags(job_id, data, event) abort
+      call s:HaskellTagsDone(1)
+    endfunction
+    let s:HaskellTagsHandler = {
+      \ 'on_exit': function('s:HaskellTags')
+      \ }
+
+    " Setup ghc-mod
+    function! s:HaskellGhcModDone(msg) abort
+      call deoplete#enable()
+      if a:msg
+        echomsg 'haskell: ghc-mod ready'
+      endif
+      if !executable('hasktags')
+        echomsg 'haskell: installing hasktags'
+        call jobstart('stack build hasktags', s:HaskellTagsHandler)
+      else
+        call s:HaskellTagsDone(0)
+      endif
+    endfunction!
+
+    function! s:HaskellGhcMod(job_id, data, event) abort
+      call s:HaskellGhcModDone(1)
+    endfunction
+    let s:HaskellGhcModHandler = {
+      \ 'on_exit': function('s:HaskellGhcMod')
+      \ }
+
+    " Setup paths
+    function! s:HaskellPath(job_id, data, event) abort
+      let $PATH = a:data[0]
+      let $GHC_PACKAGE_PATH = a:data[1]
+      echomsg 'haskell: paths set'
+      function! s:HaskellLazyLoad()
+        autocmd! haskell_lazy_load
+        augroup! haskell_lazy_load
+        if !executable('ghc-mod') || exepath('ghc-mod') is# expand('$HOME') . '/.local/bin/ghc-mod'
+          echomsg 'haskell: installing ghc-mod'
+          call jobstart('stack build ghc-mod', s:HaskellGhcModHandler)
+        else
+          call s:HaskellGhcModDone(0)
+        endif
+      endfunction
+
+      augroup haskell_lazy_load
+        au!
+        au InsertEnter *.hs call s:HaskellLazyLoad() | delfunction s:HaskellLazyLoad
+      augroup end
+    endfunction
+    let s:HaskellPathHandler = {
+     \ 'on_stdout': function('s:HaskellPath')
+     \ }
+
     call jobstart('stack exec printenv PATH GHC_PACKAGE_PATH', s:HaskellPathHandler)
   endif
 endfunction
@@ -113,4 +139,10 @@ augroup haskell_commands
   au BufNewFile,BufRead *.dump-stg,*.dump-simpl setf haskell
   au BufNewFile,BufRead *.dump-cmm,*.dump-opt-cmm setf c
   au BufNewFile,BufRead *.dump-asm setf asm
+
+  if filereadable('stack.yaml')
+    au VimEnter * call s:HaskellSetup()
+  else
+    let g:deoplete#enable_at_startup = 1
+  endif
 augroup end
