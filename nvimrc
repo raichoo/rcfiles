@@ -127,6 +127,7 @@ nnoremap <silent> <C-l> :noh<CR>
 
 colorscheme monodark
 
+set formatoptions=jcroql
 set termguicolors
 set guicursor=a:block-blinkon100-Cursor/Cursor
 set cpo-=_
