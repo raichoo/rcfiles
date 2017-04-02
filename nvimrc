@@ -1,5 +1,3 @@
-let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 0
-
 call plug#begin('~/.nvim/plugged')
 
 " essential
@@ -127,7 +125,10 @@ vnoremap <silent> g# :call HighlightSearch(0)<CR>:let v:searchforward=1<CR>:set 
 
 nnoremap <silent> <C-l> :noh<CR>
 
+colorscheme monodark
+
 set termguicolors
+set guicursor=a:block-blinkon100-Cursor/Cursor
 set cpo-=_
 set nojoinspaces
 set splitright
@@ -163,8 +164,6 @@ set textwidth=80
 set shortmess+=I
 set grepprg=rg\ --vimgrep\ --no-heading
 set grepformat=%f:%l:%c:%m,%f:%l:%m
-
-colorscheme monodark
 
 augroup commands
   au!
