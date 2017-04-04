@@ -112,6 +112,10 @@ inoremap <Left> <nop>
 inoremap <Right> <nop>
 inoremap <PageUp> <nop>
 inoremap <PageDown> <nop>
+
+map Q <nop>
+map gQ <nop>
+
 inoremap <C-l> <Esc>
 
 nnoremap <silent> * :call HighlightSearch(1)<CR>:let v:searchforward=1<CR>:set hlsearch<CR>
