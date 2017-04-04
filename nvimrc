@@ -175,6 +175,7 @@ augroup end
 autocmd! User FzfStatusLine setlocal statusline=%#airline_z#\ FZF\ %#airline_a_to_airline_b#>%#airline_x_inactive#>
 
 let g:netrw_banner = 0
+let g:netrw_liststyle = 3
 
 let g:haskell_enable_quantification = 1
 let g:haskell_enable_typeroles = 1
