@@ -3,33 +3,7 @@ function! s:HaskellSetup() abort
   if $STACK_PROJECT_ROOT is# ""
     let $STACK_PROJECT_ROOT = $PWD
 
-    " Teardown
-    function! s:HaskellCleanup()
-      autocmd! haskell_cleanup
-      augroup! haskell_cleanup
-
-      delfunction s:HaskellDone
-      delfunction s:HaskellTagsDone
-      delfunction s:HaskellTags
-      delfunction s:HaskellGhcModDone
-      delfunction s:HaskellGhcMod
-      delfunction s:HaskellPath
-
-      unlet s:HaskellTagsHandler
-      unlet s:HaskellGhcModHandler
-      unlet s:HaskellPathHandler
-    endfunction
-
-    function! s:HaskellDone() abort
-      augroup haskell_cleanup
-        au!
-        au InsertLeave *.hs call s:HaskellCleanup() | delfunction s:HaskellCleanup
-      augroup end
-    endfunction
-
-    " Setup hasktags
-    function! s:HaskellTagsDone(msg) abort
-      " hasktags functions
+    if executable('hasktags')
       function! s:HaskellRebuildTagsFinished(job_id, data, event) abort
         let g:haskell_rebuild_tags = 0
       endfunction
@@ -48,18 +22,22 @@ function! s:HaskellSetup() abort
         au!
         au BufWritePost *.hs call s:HaskellRebuildTags()
       augroup end
-      if a:msg
-        echomsg 'haskell: hasktags ready'
-      endif
-      call s:HaskellDone()
-    endfunction
 
-    function! s:HaskellTags(job_id, data, event) abort
-      call s:HaskellTagsDone(1)
+      command! Hasktags call s:HaskellRebuildTags()
+    endif
+
+    " Teardown
+    function! s:HaskellCleanup()
+      autocmd! haskell_cleanup
+      augroup! haskell_cleanup
+
+      delfunction s:HaskellGhcModDone
+      delfunction s:HaskellGhcMod
+      delfunction s:HaskellPath
+
+      unlet s:HaskellGhcModHandler
+      unlet s:HaskellPathHandler
     endfunction
-    let s:HaskellTagsHandler = {
-      \ 'on_exit': function('s:HaskellTags')
-      \ }
 
     " Setup ghc-mod
     function! s:HaskellGhcModDone(msg) abort
@@ -67,12 +45,10 @@ function! s:HaskellSetup() abort
       if a:msg
         echomsg 'haskell: ghc-mod ready'
       endif
-      if !executable('hasktags')
-        echomsg 'haskell: installing hasktags'
-        call jobstart('stack build hasktags', s:HaskellTagsHandler)
-      else
-        call s:HaskellTagsDone(0)
-      endif
+      augroup haskell_cleanup
+        au!
+        au InsertLeave *.hs call s:HaskellCleanup() | delfunction s:HaskellCleanup
+      augroup end
     endfunction!
 
     function! s:HaskellGhcMod(job_id, data, event) abort
