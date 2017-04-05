@@ -107,6 +107,8 @@ function fish_mode_prompt
   echo -n ":"
 end
 
+fish_vi_key_bindings
+
 function fish_user_key_bindings
   bind -e -M insert \n
   bind -e -M insert \r
