@@ -180,6 +180,8 @@ autocmd! User FzfStatusLine setlocal statusline=%#airline_z#\ FZF\ %#airline_a_t
 
 let g:netrw_banner = 0
 let g:netrw_liststyle = 3
+let g:netrw_fastbrowse = 0
+let g:netrw_bufsettings = "noma nomod nu nobl nowrap ro rnu"
 
 let g:haskell_enable_quantification = 1
 let g:haskell_enable_typeroles = 1
