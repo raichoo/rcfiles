@@ -1,64 +1,36 @@
-" initialze haskell environment
+if executable('hasktags')
+  function! s:HaskellRebuildTagsFinished(job_id, data, event) abort
+    let g:haskell_rebuild_tags = 0
+  endfunction
+  let s:HaskellRebuildTagsFinishedHandler = {
+    \ 'on_exit': function('s:HaskellRebuildTagsFinished')
+    \ }
+
+  function! s:HaskellRebuildTags() abort
+    if !get(g:, 'haskell_rebuild_tags', 0)
+      let l:cmd = 'hasktags --ignore-close-implementation --ctags .; sort tags'
+      let g:haskell_rebuild_tags = jobstart(l:cmd, s:HaskellRebuildTagsFinishedHandler)
+    endif
+  endfunction
+
+  augroup haskell_tags
+    au!
+    au BufWritePost *.hs call s:HaskellRebuildTags()
+  augroup end
+
+  command! Hasktags call s:HaskellRebuildTags()
+endif
+
 function! s:HaskellSetup() abort
   if $STACK_PROJECT_ROOT is# ""
-    let $STACK_PROJECT_ROOT = $PWD
-
-    if executable('hasktags')
-      function! s:HaskellRebuildTagsFinished(job_id, data, event) abort
-        let g:haskell_rebuild_tags = 0
-      endfunction
-      let s:HaskellRebuildTagsFinishedHandler = {
-        \ 'on_exit': function('s:HaskellRebuildTagsFinished')
-        \ }
-
-      function! s:HaskellRebuildTags() abort
-        if !get(g:, 'haskell_rebuild_tags', 0)
-          let l:cmd = 'hasktags --ignore-close-implementation --ctags .; sort tags'
-          let g:haskell_rebuild_tags = jobstart(l:cmd, s:HaskellRebuildTagsFinishedHandler)
-        endif
-      endfunction
-
-      augroup haskell_tags
-        au!
-        au BufWritePost *.hs call s:HaskellRebuildTags()
-      augroup end
-
-      command! Hasktags call s:HaskellRebuildTags()
-    endif
-
-    " Teardown
-    function! s:HaskellCleanup()
-      autocmd! haskell_cleanup
-      augroup! haskell_cleanup
-
-      delfunction s:HaskellGhcModDone
-      delfunction s:HaskellGhcMod
-      delfunction s:HaskellPath
-
-      unlet s:HaskellGhcModHandler
-      unlet s:HaskellPathHandler
-    endfunction
-
-    " Setup ghc-mod
-    function! s:HaskellGhcModDone(msg) abort
-      call deoplete#enable()
-      if a:msg
-        echomsg 'haskell: ghc-mod ready'
-      endif
-      augroup haskell_cleanup
-        au!
-        au InsertLeave *.hs call s:HaskellCleanup() | delfunction s:HaskellCleanup
-      augroup end
-    endfunction!
-
     function! s:HaskellGhcMod(job_id, data, event) abort
-      call s:HaskellGhcModDone(1)
+      call deoplete#enable()
+      echomsg 'haskell: ghc-mod ready'
     endfunction
     let s:HaskellGhcModHandler = {
       \ 'on_exit': function('s:HaskellGhcMod')
       \ }
 
-    " Setup paths
     function! s:HaskellPath(job_id, data, event) abort
       let $PATH = a:data[0]
       let $GHC_PACKAGE_PATH = a:data[1]
@@ -70,7 +42,7 @@ function! s:HaskellSetup() abort
           echomsg 'haskell: installing ghc-mod'
           call jobstart('stack build ghc-mod', s:HaskellGhcModHandler)
         else
-          call s:HaskellGhcModDone(0)
+          call deoplete#enable()
         endif
       endfunction
 
@@ -83,11 +55,18 @@ function! s:HaskellSetup() abort
      \ 'on_stdout': function('s:HaskellPath')
      \ }
 
-    call jobstart('stack exec printenv PATH GHC_PACKAGE_PATH', s:HaskellPathHandler)
+    let l:resolver = systemlist('grep "^resolver:" stack.yaml | cut -d" " -f2')[0]
+
+    if !isdirectory(expand('$HOME') . '/.stack/snapshots/x86_64-linux/' . l:resolver)
+      echomsg 'haskell: uninitialized snapshot ' . l:resolver
+    else
+      let $STACK_PROJECT_ROOT = $PWD
+      call jobstart('stack exec printenv PATH GHC_PACKAGE_PATH', s:HaskellPathHandler)
+    endif
   endif
 endfunction
+command! HaskellSetup call s:HaskellSetup()
 
-" helper functions
 function! s:HaskellSkel() abort
   if @% is# 'Main.hs'
     silent! normal! imodule Main wheremain :: IO ()main = return ()2B
