@@ -9,9 +9,9 @@ if status --is-login
   set -x __fish_bin_dir /home/raichoo/Local/fish/bin
 end
 
-if test "$STACK_PROJECT_ROOT" != $PWD; and test -e "stack.yaml"
-  set -x GHC_PACKAGE_PATH (stack exec printenv GHC_PACKAGE_PATH)
-  stack exec printenv PATH | tr ':' ' ' | read -x -a PATH
+if test "$STACK_PROJECT_ROOT" != ""; and test "$STACK_PROJECT_ROOT" != $PWD; and test -e "stack.yaml"
+ set -x GHC_PACKAGE_PATH (stack exec printenv GHC_PACKAGE_PATH)
+ stack exec printenv PATH | tr ':' ' ' | read -x -a PATH
 end
 
 set -x MANPAGER "nvim -c 'set ft=man' -"
