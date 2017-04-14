@@ -45,9 +45,6 @@ set -g __fish_git_prompt_color_stagedstate yellow
 set -g __fish_git_prompt_color_invalidstate red
 set -g __fish_git_prompt_color_untrackedfiles red
 set -g __fish_git_prompt_color_cleanstate green
-function print_color
-  printf "\x1b[38;2;%d;%d;%dm%3d %3d %3d \x1b[0m #%02X%02X%02X\n" $argv[1] $argv[2] $argv[3] $argv[1] $argv[2] $argv[3] $argv[1] $argv[2] $argv[3]
-end
 
 set -x LS_COLORS (cat ~/.dircolors)
 
