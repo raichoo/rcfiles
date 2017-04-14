@@ -58,11 +58,13 @@ function fish_greeting
 end
 
 function pwd_prompt
+  set_color 66D9EF
   if test $PWD = $HOME
-    echo "~"
+    echo -n "~"
   else
-    echo (basename $PWD)
+    echo -n (basename $PWD)
   end
+  set_color normal
 end
 
 function current_mode
@@ -85,11 +87,7 @@ function current_mode
   echo -n "⟧"
 end
 
-function fish_prompt
-  printf "%s%s%s@%s%s%s:%s%s%s%s» " (set_color --bold FD971F) (whoami) (set_color normal) (set_color --bold F92672) (hostname) (set_color normal) (set_color 66D9EF) (pwd_prompt) (set_color normal) (__fish_git_prompt)
-end
-
-function fish_right_prompt
+function time_prompt
   set -l _status $status
   echo -n "⟦"
   if test $_status = 0
@@ -97,14 +95,29 @@ function fish_right_prompt
   else
     set_color --bold EF5939
   end
-  date +"%T"
+  echo -n (date +"%T")
   set_color normal
-  echo -n "⟧"
+  echo -n "⟧:"
+end
+
+function user_prompt
+  printf "%s%s%s" (set_color --bold FD971F) (whoami) (set_color normal)
+end
+
+function host_prompt
+  printf "%s%s%s" (set_color --bold F92672) (hostname) (set_color normal)
+end
+
+function fish_prompt
+  printf "%s@%s:%s» " (user_prompt) (host_prompt) (pwd_prompt)
+end
+
+function fish_right_prompt
+  current_mode
 end
 
 function fish_mode_prompt
-  current_mode
-  echo -n ":"
+  time_prompt
 end
 
 fish_vi_key_bindings
