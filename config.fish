@@ -40,11 +40,12 @@ set -g __fish_git_prompt_char_untrackedfiles "…"
 set -g __fish_git_prompt_char_conflictedstate "✖"
 set -g __fish_git_prompt_char_cleanstate "✔"
 
-set -g __fish_git_prompt_color_dirtystate red
-set -g __fish_git_prompt_color_stagedstate yellow
-set -g __fish_git_prompt_color_invalidstate red
-set -g __fish_git_prompt_color_untrackedfiles red
-set -g __fish_git_prompt_color_cleanstate green
+set -g __fish_git_prompt_color_dirtystate EF5939
+set -g __fish_git_prompt_color_stagedstate E6DB74
+set -g __fish_git_prompt_color_invalidstate EF5939
+set -g __fish_git_prompt_color_untrackedfiles EF5939
+set -g __fish_git_prompt_color_cleanstate B8E673
+set -g __fish_git_prompt_color_branch E6DB74
 
 set -x LS_COLORS (cat ~/.dircolors)
 
