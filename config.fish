@@ -130,3 +130,15 @@ function fish_user_key_bindings
   bind -M default --sets-mode insert \n force-repaint execute
   bind -M default --sets-mode insert \r force-repaint execute
 end
+
+set -g fish_color_redirection F92672 --bold
+set -g fish_color_operator F92672 --bold
+set -g fish_color_match FD971F
+set -g fish_color_param B8E673
+set -g fish_color_command FFFFFF
+set -g fish_color_quote E6DB74
+set -g fish_color_comment 7E8E91
+set -g fish_color_autosuggestion 66D9EF --underline
+set -g fish_color_error EF5939
+set -g fish_color_end 8F8F8F
+set -g fish_color_valid_path --bold
