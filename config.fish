@@ -18,8 +18,6 @@ set -x MANPAGER "nvim -c 'set ft=man' -"
 set -x BROWSER /usr/bin/firefox
 set -x PAGER "less"
 set -x LESS "-qR"
-set -x DARCS_DO_COLOR_LINES 1
-set -x DARCS_ALWAYS_COLOR 1
 set -x JAVA_HOME /usr
 set -x TERM gnome-256color
 set -x EDITOR /home/raichoo/Local/bin/nvim
@@ -32,8 +30,6 @@ set -g __fish_git_prompt_color_branch yellow
 set -g __fish_git_prompt_showupstream "informative"
 set -g __fish_git_prompt_char_upstream_ahead "↑"
 set -g __fish_git_prompt_char_upstream_behind "↓"
-set -g __fish_git_prompt_char_upstream_prefix ""
-
 set -g __fish_git_prompt_char_stagedstate "●"
 set -g __fish_git_prompt_char_dirtystate "✚"
 set -g __fish_git_prompt_char_untrackedfiles "…"
@@ -65,7 +61,7 @@ function pwd_prompt
   set_color normal
 end
 
-function current_mode
+function mode_prompt
   echo -n "⟦"
   switch $fish_bind_mode
     case default
@@ -86,16 +82,12 @@ function current_mode
 end
 
 function time_prompt
-  set -l _status $status
-  echo -n "⟦"
-  if test $_status = 0
-    set_color --bold B8E673
+  if test $status = 0
+    printf "⟦%s" (set_color --bold B8E673)
   else
-    set_color --bold EF5939
+    printf "⟦%s" (set_color --bold EF5939)
   end
-  echo -n (date +"%T")
-  set_color normal
-  echo -n "⟧:"
+  printf "%s%s⟧" (date +"%T") (set_color normal)
 end
 
 function user_prompt
@@ -107,15 +99,15 @@ function host_prompt
 end
 
 function fish_prompt
-  printf "%s@%s:%s» " (user_prompt) (host_prompt) (pwd_prompt)
+  printf ":%s@%s:%s%s» " (user_prompt) (host_prompt) (pwd_prompt) (__fish_git_prompt "(%s)")
 end
 
 function fish_right_prompt
-  current_mode
+  time_prompt
 end
 
 function fish_mode_prompt
-  time_prompt
+  mode_prompt
 end
 
 fish_vi_key_bindings
