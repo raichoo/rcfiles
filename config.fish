@@ -110,9 +110,8 @@ function fish_mode_prompt
   mode_prompt
 end
 
-fish_vi_key_bindings
-
 function fish_user_key_bindings
+  fish_vi_key_bindings
   bind -e -M insert \n
   bind -e -M insert \r
   bind -e -M default \n
