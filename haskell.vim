@@ -22,10 +22,15 @@ if executable('hasktags')
 endif
 
 function! s:HaskellSetup() abort
+  highlight HaskellUninitLTS guifg=#EF5939 guibg=#465457
+  highlight HaskellReadyLTS  guifg=#B8E673 guibg=#465457
+  highlight HaskellInitLTS   guifg=#E6DB74 guibg=#465457
+
   if $STACK_PROJECT_ROOT is# ""
     function! s:HaskellGhcMod(job_id, data, event) abort
+      let g:airline_section_x = airline#section#create(['filetype', ' ', '%#HaskellReadyLTS#' . g:haskell_stack_resolver])
+      AirlineRefresh
       call deoplete#enable()
-      echomsg 'haskell: ghc-mod ready'
     endfunction
     let s:HaskellGhcModHandler = {
       \ 'on_exit': function('s:HaskellGhcMod')
@@ -34,31 +39,36 @@ function! s:HaskellSetup() abort
     function! s:HaskellPath(job_id, data, event) abort
       let $PATH = a:data[0]
       let $GHC_PACKAGE_PATH = a:data[1]
-      echomsg 'haskell: paths set'
-      function! s:HaskellLazyLoad()
-        autocmd! haskell_lazy_load
-        augroup! haskell_lazy_load
-        if !executable('ghc-mod') || exepath('ghc-mod') is# expand('$HOME') . '/.local/bin/ghc-mod'
-          echomsg 'haskell: installing ghc-mod'
-          call jobstart('stack build ghc-mod', s:HaskellGhcModHandler)
-        else
-          call deoplete#enable()
-        endif
-      endfunction
+      if !executable('ghc-mod') || exepath('ghc-mod') is# expand('$HOME') . '/.local/bin/ghc-mod'
+        function! s:HaskellLazyLoad()
+          autocmd! haskell_lazy_load
+          augroup! haskell_lazy_load
+            let g:airline_section_x = airline#section#create(['filetype', ' ', '%#HaskellInitLTS#●' . g:haskell_stack_resolver])
+            AirlineRefresh
+            call jobstart('stack build ghc-mod', s:HaskellGhcModHandler)
+        endfunction
 
-      augroup haskell_lazy_load
-        au!
-        au InsertEnter *.hs call s:HaskellLazyLoad() | delfunction s:HaskellLazyLoad
-      augroup end
+        let g:airline_section_x = airline#section#create(['filetype', ' ', '%#HaskellInitLTS#' . g:haskell_stack_resolver])
+        AirlineRefresh
+        augroup haskell_lazy_load
+          au!
+          au InsertEnter *.hs call s:HaskellLazyLoad() | delfunction s:HaskellLazyLoad
+        augroup end
+      else
+        let g:airline_section_x = airline#section#create(['filetype', ' ', '%#HaskellReadyLTS#' . g:haskell_stack_resolver])
+        AirlineRefresh
+        call deoplete#enable()
+      endif
     endfunction
     let s:HaskellPathHandler = {
      \ 'on_stdout': function('s:HaskellPath')
      \ }
 
-    let l:resolver = systemlist('grep "^resolver:" stack.yaml | cut -d" " -f2')[0]
+    let g:haskell_stack_resolver = systemlist('grep "^resolver:" stack.yaml | cut -d" " -f2')[0]
 
-    if !isdirectory(expand('$HOME') . '/.stack/snapshots/x86_64-linux/' . l:resolver)
-      echomsg 'haskell: uninitialized snapshot ' . l:resolver
+    if !isdirectory(expand('$HOME') . '/.stack/snapshots/x86_64-linux/' . g:haskell_stack_resolver)
+      let g:airline_section_x = airline#section#create(['filetype', ' ', '%#HaskellUninitLTS#' . g:haskell_stack_resolver])
+      AirlineRefresh
     else
       let $STACK_PROJECT_ROOT = $PWD
       call jobstart('stack exec printenv PATH GHC_PACKAGE_PATH', s:HaskellPathHandler)
