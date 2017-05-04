@@ -1,12 +1,12 @@
 # OPAM configuration
-#. /home/raichoo/.opam/opam-init/init.fish > /dev/null 2> /dev/null or true
+# source /usr/home/raichoo/.opam/opam-init/init.fish > /dev/null 2> /dev/null or true
 
 # setup paths
 if status --is-login
-  set -x PATH /home/raichoo/Local/bin /home/raichoo/.local/bin $PATH
-  set -x MANPATH /home/raichoo/Local/man /usr/share/man $MANPATH
-  set -x PYTHONPATH /home/raichoo/.local/lib/python3.6/site-packages /home/raichoo/Local/python/lib/python2.7/site-packages /home/raichoo/Local/z3/lib/python2.7/dist-packages $PYTHONPATH
-  set -x __fish_bin_dir /home/raichoo/Local/fish/bin
+  set -x PATH /usr/home/raichoo/Local/bin /usr/home/raichoo/.local/bin $PATH /usr/home/raichoo/.cargo/bin
+  set -x MANPATH /usr/home/raichoo/Local/man /usr/share/man /usr/local/man $MANPATH
+  set -x PYTHONPATH /usr/home/raichoo/.local/lib/python3.6/site-packages /usr/home/raichoo/Local/python/lib/python2.7/site-packages /usr/home/raichoo/Local/z3/lib/python2.7/dist-packages $PYTHONPATH
+  set -x __fish_bin_dir /usr/home/raichoo/Local/fish/bin
 end
 
 if test "$STACK_PROJECT_ROOT" != ""; and test "$STACK_PROJECT_ROOT" != $PWD; and test -e "stack.yaml"
@@ -19,8 +19,8 @@ set -x BROWSER /usr/bin/firefox
 set -x PAGER "less"
 set -x LESS "-qR"
 set -x JAVA_HOME /usr
-set -x TERM gnome-256color
-set -x EDITOR /home/raichoo/Local/bin/nvim
+set -x TERM xterm-256color
+set -x EDITOR /usr/home/raichoo/Local/bin/nvim
 set -g fish_term24bit 1
 
 set -g __fish_git_prompt_show_informative_status 1
@@ -43,7 +43,7 @@ set -g __fish_git_prompt_color_untrackedfiles EF5939
 set -g __fish_git_prompt_color_cleanstate B8E673
 set -g __fish_git_prompt_color_branch E6DB74
 
-set -x LS_COLORS (cat ~/.dircolors)
+set -x LSCOLORS "gxfxcxdxbxegedabagacad"
 
 alias vi=nvim
 alias vim=nvim
@@ -53,7 +53,7 @@ end
 
 function pwd_prompt
   set_color 66D9EF
-  if test $PWD = $HOME
+  if test $PWD = "/usr$HOME"
     echo -n "~"
   else
     echo -n (basename $PWD)

@@ -48,9 +48,8 @@ function! s:HaskellSetup() abort
     \ 'on_exit': function('s:HaskellGhcMod')
     \ }
 
-  function! s:HaskellPath(job_id, data, event) abort
-    let $PATH = a:data[0]
-    let $GHC_PACKAGE_PATH = a:data[1]
+  function! s:HaskellPackagePath(job_id, data, event) abort
+    let $GHC_PACKAGE_PATH = a:data[0]
     if !executable('ghc-mod') || exepath('ghc-mod') is# expand('$HOME') . '/.local/bin/ghc-mod'
       function! s:HaskellLazyLoad()
         autocmd! haskell_lazy_load
@@ -69,6 +68,14 @@ function! s:HaskellSetup() abort
       call deoplete#enable()
     endif
   endfunction
+  let s:HaskellPackagePathHandler = {
+   \ 'on_stdout': function('s:HaskellPackagePath')
+   \ }
+
+  function! s:HaskellPath(job_id, data, event) abort
+    let $PATH = a:data[0]
+    call jobstart('env PATH=' . g:haskell_original_path . ' stack exec printenv GHC_PACKAGE_PATH', s:HaskellPackagePathHandler)
+  endfunction
   let s:HaskellPathHandler = {
    \ 'on_stdout': function('s:HaskellPath')
    \ }
@@ -77,7 +84,7 @@ function! s:HaskellSetup() abort
 
   if l:resolver isnot# get(g:, 'haskell_stack_resolver', '')
     let g:haskell_stack_resolver = l:resolver
-    if !isdirectory(expand('$HOME') . '/.stack/snapshots/x86_64-linux/' . g:haskell_stack_resolver)
+    if !isdirectory(expand('$HOME') . '/.stack/snapshots/x86_64-freebsd/' . g:haskell_stack_resolver)
       call s:HaskellStackHealth('unintialized')
     else
       let g:haskell_original_path = get(g:, 'haskell_original_path', $PATH)

@@ -1,5 +1,6 @@
 call plug#begin('~/.nvim/plugged')
 
+
 " essential
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
@@ -30,7 +31,7 @@ Plug 'tpope/vim-fugitive'
 
 call plug#end()
 
-source ~/.nvim/haskell.vim
+source ~/.config/nvim/haskell.vim
 
 filetype plugin indent on
 
@@ -157,9 +158,9 @@ set expandtab
 set cmdheight=1
 set cursorline
 set undofile
-set undodir=~/.nvim/tmp/undo//
-set backupdir=~/.nvim/tmp/backup//
-set directory=~/.nvim/tmp/swap//
+set undodir=~/.nvim/tmp/undo/
+set backupdir=~/.nvim/tmp/backup/
+set directory=~/.nvim/tmp/swap/
 set backup
 set noswapfile
 set list
