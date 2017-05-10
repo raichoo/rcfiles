@@ -1,0 +1,101 @@
+#disable default mappings
+bind CM-Return unmap
+bind CM-Delete unmap
+bind M-Return unmap
+bind M-Down unmap
+bind M-Up unmap
+bind M-/ unmap
+bind C-/ unmap
+bind CM-n unmap
+bind M-Tab unmap
+bind MS-Tab unmap
+bind CM-x unmap
+bind CM-[n] unmap
+bind CM-0 unmap
+bind CM-g unmap
+bind M-Right unmap
+bind M-Left unmap
+bind CMS-f unmap
+bind CM-s unmap
+bind CM-f unmap
+bind CM-m unmap
+bind CM-= unmap
+bind CMS-= unmap
+bind M-? unmap
+bind M-. unmap
+bind CM-w unmap
+#bind CMS-r unmap
+bind CMS-q unmap
+
+mousebind M-1 unmap
+mousebind CM-1 unmap
+mousebind M-2 unmap
+mousebind M-3 unmap
+mousebind CMS-3 unmap
+
+# configuration
+bind 4S-Return "sakura --login"
+bind 4S-c delete
+bind 4-l label
+bind 4-m maximize
+bind 4S-l lock
+bind 4S-q quit
+bind 4-r exec
+bind 4-f fullscreen
+bind 4S-f freeze
+bind 4-h hide
+bind 4-g grouptoggle
+bind 4-0 nogroup
+bind 4-1 grouponly1
+bind 4-2 grouponly2
+bind 4-3 grouponly3
+bind 4-4 grouponly4
+bind 4-5 grouponly5
+bind 4-6 grouponly6
+bind 4-7 grouponly7
+bind 4-8 grouponly8
+bind 4-9 grouponly9
+bind 4S-1 movetogroup1
+bind 4S-2 movetogroup2
+bind 4S-3 movetogroup3
+bind 4S-4 movetogroup4
+bind 4S-5 movetogroup5
+bind 4S-6 movetogroup6
+bind 4S-7 movetogroup7
+bind 4S-8 movetogroup8
+bind 4S-9 movetogroup9
+bind 4-Up lower
+bind 4-Down raise
+bind 4-Tab cycle
+bind 4S-Tab rcycle
+bind 4-Page_Down cyclegroup
+bind 4-Page_Up rcyclegroup
+bind 4S-7 search
+bind 4S-h htile
+bind 4S-v vtile
+bind 4S-Up bigresizeup
+bind 4S-Down bigresizedown
+bind 4S-Left bigresizeleft
+bind 4S-Right bigresizeright
+bind 4CS-Up bigmoveup
+bind 4CS-Down bigmovedown
+bind 4CS-Left bigmoveleft
+bind 4CS-Right bigmoveright
+
+mousebind 4-1 window_move
+mousebind 4-2 window_resize
+
+snapdist 10
+sticky yes
+moveamount 10
+
+fontname "Inconsolata:pixelsize=13"
+color menubg "#282C34"
+color menufg "#282C34"
+color font "#FFFFFF"
+color selfont "#66D9EF"
+
+command lock slock
+command term "sakura --login"
+
+ignore menu
