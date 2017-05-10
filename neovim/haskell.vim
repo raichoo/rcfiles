@@ -1,4 +1,4 @@
-if executable('hasktags')
+if filereadable('stack.yaml') && executable('hasktags')
   function! s:HaskellRebuildTagsFinished(job_id, data, event) abort
     let g:haskell_rebuild_tags = 0
   endfunction
