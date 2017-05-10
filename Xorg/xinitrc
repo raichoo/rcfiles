@@ -1,3 +1,4 @@
 setxkbmap -option caps:escape
 xset m 2/1 0
-exec dbus-launch --exit-with-session ssh-agent openbox-session
+feh --bg-fill ~/Pictures/.background
+exec dbus-launch --exit-with-session ssh-agent cwm
