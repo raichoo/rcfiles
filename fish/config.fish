@@ -1,5 +1,5 @@
 # OPAM configuration
-# source /usr/home/raichoo/.opam/opam-init/init.fish > /dev/null 2> /dev/null or true
+source /usr/home/raichoo/.opam/opam-init/init.fish > /dev/null 2> /dev/null or true
 
 # setup paths
 if status --is-login
