@@ -15,7 +15,7 @@ if test "$STACK_PROJECT_ROOT" != ""; and test "$STACK_PROJECT_ROOT" != $PWD; and
 end
 
 set -x MANPAGER "nvim -c 'set ft=man' -"
-set -x BROWSER /usr/bin/firefox
+set -x BROWSER (which firefox)
 set -x PAGER "less"
 set -x LESS "-qR"
 set -x JAVA_HOME /usr
