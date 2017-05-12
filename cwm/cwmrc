@@ -30,6 +30,10 @@ bind CS-Up unmap
 bind CS-Down unmap
 bind CS-Left unmap
 bind CS-Right unmap
+bind C-Up unmap
+bind C-Down unmap
+bind C-Left unmap
+bind C-Right unmap
 
 mousebind M-1 unmap
 mousebind CM-1 unmap
@@ -86,14 +90,14 @@ bind 4-Page_Up rcyclegroup
 bind 4S-7 search
 bind 4S-h htile
 bind 4S-v vtile
-bind 4S-Up bigresizeup
-bind 4S-Down bigresizedown
-bind 4S-Left bigresizeleft
-bind 4S-Right bigresizeright
-bind 4CS-Up bigmoveup
-bind 4CS-Down bigmovedown
-bind 4CS-Left bigmoveleft
-bind 4CS-Right bigmoveright
+bind 4CS-Up bigresizeup
+bind 4CS-Down bigresizedown
+bind 4CS-Left bigresizeleft
+bind 4CS-Right bigresizeright
+bind 4S-Up bigmoveup
+bind 4S-Down bigmovedown
+bind 4S-Left bigmoveleft
+bind 4S-Right bigmoveright
 
 mousebind 4-1 window_move
 mousebind 4-2 window_resize
