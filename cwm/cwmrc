@@ -68,6 +68,15 @@ bind 4S-6 movetogroup6
 bind 4S-7 movetogroup7
 bind 4S-8 movetogroup8
 bind 4S-9 movetogroup9
+bind 4M-1 group1
+bind 4M-2 group2
+bind 4M-3 group3
+bind 4M-4 group4
+bind 4M-5 group5
+bind 4M-6 group6
+bind 4M-7 group7
+bind 4M-8 group8
+bind 4M-9 group9
 bind 4-Up lower
 bind 4-Down raise
 bind 4-Tab cycle
