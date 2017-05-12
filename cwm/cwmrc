@@ -110,5 +110,3 @@ color selfont "#66D9EF"
 
 command lock slock
 command term "sakura --login"
-
-ignore menu
