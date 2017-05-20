@@ -1,5 +1,4 @@
 #!/bin/sh
-dunst&
 mixer -s pcm 60
-feh --bg-fill ~/Pictures/.background
+~/.fehbg
 exec cwm
