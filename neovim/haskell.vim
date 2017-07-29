@@ -88,7 +88,7 @@ function! s:HaskellSetup() abort
       call s:HaskellStackHealth('unintialized')
     else
       let g:haskell_original_path = get(g:, 'haskell_original_path', $PATH)
-      call jobstart('env PATH=' . g:haskell_original_path . ' stack exec printenv PATH GHC_PACKAGE_PATH', s:HaskellPathHandler)
+      call jobstart('env PATH=' . g:haskell_original_path . ' stack exec printenv PATH', s:HaskellPathHandler)
     endif
   endif
 endfunction
