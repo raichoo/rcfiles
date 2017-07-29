@@ -14,7 +14,7 @@ if test "$STACK_PROJECT_ROOT" != ""; and test "$STACK_PROJECT_ROOT" != $PWD; and
  stack exec printenv PATH | tr ':' ' ' | read -x -a PATH
 end
 
-set -x MANPAGER "env TERM='' nvim -c 'set ft=man' -"
+set -x MANPAGER "nvim -c 'set ft=man' -"
 set -x BROWSER (which firefox)
 set -x PAGER "less"
 set -x LESS "-qR"
@@ -44,8 +44,8 @@ set -g __fish_git_prompt_color_branch E6DB74
 
 set -x LSCOLORS "gxfxcxdxbxegedabagacad"
 
-alias vi='env TERM="" nvim'
-alias vim='env TERM="" nvim'
+alias vi='nvim'
+alias vim='nvim'
 
 function fish_greeting
 end
