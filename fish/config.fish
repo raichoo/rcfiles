@@ -82,11 +82,11 @@ end
 
 function time_prompt
   if test $status = 0
-    printf "⟦%s" (set_color --bold B8E673)
+    printf "%s" (set_color --bold B8E673)
   else
-    printf "⟦%s" (set_color --bold EF5939)
+    printf "%s" (set_color --bold EF5939)
   end
-  printf "%s%s⟧" (date +"%T") (set_color normal)
+  printf "%s%s" (date +"%T") (set_color normal)
 end
 
 function user_prompt
@@ -101,8 +101,26 @@ function fish_prompt
   printf ":%s@%s:%s%s» " (user_prompt) (host_prompt) (pwd_prompt) (__fish_git_prompt "(%s)")
 end
 
+function battery_prompt
+  set -l power (sysctl -n hw.acpi.battery.life)
+
+  if test $power -gt 50
+    return
+  end
+
+  echo -n "("
+  if test $power -le 10
+    echo -n (set_color --bold EF5939)
+  else if test $power -le 30
+    echo -n (set_color --bold FD971F)
+  else if test $power -le 50
+    echo -n (set_color --bold E6DB74)
+  end
+  printf "%d%%%s)" $col $power (set_color normal)
+end
+
 function fish_right_prompt
-  time_prompt
+  printf "⟦%s%s⟧" (time_prompt) (battery_prompt)
 end
 
 function fish_mode_prompt
