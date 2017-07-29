@@ -106,7 +106,7 @@ snapdist 10
 sticky yes
 moveamount 10
 
-fontname "Inconsolata:pixelsize=13"
+fontname "Inconsolata:pixelsize=14"
 color menubg "#282C34"
 color menufg "#282C34"
 color font "#FFFFFF"
