@@ -72,7 +72,7 @@ function mode_prompt
     case visual
       set_color --bold FD971F
       echo -n "VISUAL"
-    case replace-one
+    case replace_one
       set_color --bold EF5939
       echo -n "REPLACE"
   end
