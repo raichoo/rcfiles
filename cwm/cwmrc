@@ -19,8 +19,6 @@ bind-key CM-m unmap
 bind-key CM-w unmap
 #bind-key CMS-r unmap
 bind-key CMS-q unmap
-bind-key CS-Up unmap
-bind-key CS-Down unmap
 bind-key CS-Left unmap
 bind-key CS-Right unmap
 bind-key C-Up unmap
@@ -36,7 +34,7 @@ bind-mouse CMS-3 unmap
 
 # configuration
 bind-key 4S-Return "/usr/home/raichoo/Local/bin/sakura --login"
-bind-key 4S-c delete
+bind-key 4S-c window-delete
 bind-key 4-l window-menu-label
 bind-key 4-m window-maximize
 bind-key 4S-l lock
@@ -80,7 +78,7 @@ bind-key 4-Tab window-cycle
 bind-key 4S-Tab window-rcycle
 bind-key 4-Page_Down group-cycle
 bind-key 4-Page_Up group-rcycle
-bind-key 4S-7 search
+bind-key 4S-7 menu-window
 bind-key 4S-h window-htile
 bind-key 4S-v window-vtile
 bind-key 4CS-Up window-resize-up-big
