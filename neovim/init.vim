@@ -35,7 +35,7 @@ filetype plugin indent on
 
 function! Rename(file) abort
   let l:f = expand('%')
-  execute 'saveas ' . a:file . ' | ' . 'bd! # | !rm ' . l:f
+  execute 'saveas ' . shellquote(a:file) . ' | ' . 'bd! # | !rm ' . shellquote(l:f)
 endfunction
 command! -complete=file -nargs=1 Rename call Rename(<f-args>)
 
