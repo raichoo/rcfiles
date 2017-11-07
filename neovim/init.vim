@@ -214,7 +214,10 @@ let g:airline#extensions#tabline#show_tab_type = 0
 let g:airline#extensions#tabline#buffer_idx_mode = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
 
-" Change mappings.
+function! denite#get_status_mode() abort
+  return ''
+endfunction
+
 call denite#custom#map(
       \ 'insert',
       \ '<C-n>',
