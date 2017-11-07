@@ -170,6 +170,9 @@ augroup commands
   au!
   au InsertEnter,WinEnter * set nocursorline
   au InsertLeave,WinEnter * set cursorline
+  au TermOpen * setlocal nonumber norelativenumber
+  au BufNewFile,BufRead *.d setf dtrace
+  au BufNewFile,BufRead *.c,*.h setlocal tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab
 augroup end
 
 let g:netrw_banner = 0
