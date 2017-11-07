@@ -1,14 +1,12 @@
 call plug#begin('~/.nvim/plugged')
 
-
 " essential
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'godlygeek/tabular'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
+Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
 
 " colors
 Plug 'raichoo/monodark'
@@ -66,15 +64,12 @@ endfunction
 let mapleader="ö"
 
 if isdirectory('.git')
-  map <silent> <Leader>lf :GFiles --others --cached --exclude-standard<cr>
-else
-  map <silent> <Leader>lf :Files<cr>
+  call denite#custom#var('file_rec', 'command',
+  \ ['git', 'ls-files', '--others', '--cached', '--exclude-standard'])
 endif
 
-map <silent> <Leader>ls :Buffers<CR>
-map <silent> <Leader>lm :Marks<CR>
-map <silent> <Leader>lt :Tags<CR>
-map <silent> <Leader>lw :Windows<CR>
+map <silent> <Leader>ls :Denite buffer<CR>
+map <silent> <Leader>lf :Denite file_rec<CR>
 
 map <silent> [a :prev<CR>
 map <silent> ]a :next<CR>
@@ -177,8 +172,6 @@ augroup commands
   au InsertLeave,WinEnter * set cursorline
 augroup end
 
-autocmd! User FzfStatusLine setlocal statusline=%#airline_z#\ FZF\ %#airline_a_to_airline_b#>%#airline_x_inactive#>
-
 let g:netrw_banner = 0
 let g:netrw_liststyle = 3
 let g:netrw_fastbrowse = 0
@@ -218,17 +211,16 @@ let g:airline#extensions#tabline#show_tab_type = 0
 let g:airline#extensions#tabline#buffer_idx_mode = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
 
-let g:fzf_layout = { 'down': '~20%' }
-let g:fzf_colors =
-\ { 'fg':      ['fg', 'Normal'],
-  \ 'bg':      ['bg', 'Normal'],
-  \ 'hl':      ['fg', 'Comment'],
-  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-  \ 'hl+':     ['fg', 'Statement'],
-  \ 'info':    ['fg', 'PreProc'],
-  \ 'prompt':  ['fg', 'Conditional'],
-  \ 'pointer': ['fg', 'Exception'],
-  \ 'marker':  ['fg', 'Keyword'],
-  \ 'spinner': ['fg', 'Label'],
-  \ 'header':  ['fg', 'Comment'] }
+" Change mappings.
+call denite#custom#map(
+      \ 'insert',
+      \ '<C-n>',
+      \ '<denite:move_to_next_line>',
+      \ 'noremap'
+      \)
+call denite#custom#map(
+      \ 'insert',
+      \ '<C-p>',
+      \ '<denite:move_to_previous_line>',
+      \ 'noremap'
+      \)
