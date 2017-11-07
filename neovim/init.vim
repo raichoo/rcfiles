@@ -17,12 +17,11 @@ Plug 'vim-airline/vim-airline'
 
 " languages
 Plug 'raichoo/smt-vim'
-Plug 'rust-lang/rust.vim'
 Plug 'pbrisbin/vim-syntax-shakespeare'
 Plug 'neovimhaskell/haskell-vim'
-Plug 'eagletmt/neco-ghc'
-Plug 'raichoo/purescript-vim'
+" Plug 'eagletmt/neco-ghc'
 Plug 'dag/vim-fish'
+" Plug 'Superbil/llvm.vim'
 
 " git
 Plug 'airblade/vim-gitgutter'
