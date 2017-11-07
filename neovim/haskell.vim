@@ -1,4 +1,6 @@
-if filereadable('stack.yaml') && executable('hasktags')
+let g:haskell_ide_ready = 0
+
+if executable('hasktags')
   function! s:HaskellRebuildTagsFinished(job_id, data, event) abort
     let g:haskell_rebuild_tags = 0
   endfunction
@@ -29,6 +31,7 @@ function! s:HaskellSetup() abort
   function! s:HaskellStackHealth(state)
     if a:state is# 'ready'
       let l:health = '%#HaskellReadyLTS#'
+      let g:haskell_ide_ready = 1
     elseif a:state is# 'installing'
       let l:health = '%#HaskellInitLTS#●'
     elseif a:state is# 'initialized'
@@ -40,33 +43,14 @@ function! s:HaskellSetup() abort
     AirlineRefresh
   endfunction
 
-  function! s:HaskellGhcMod(job_id, data, event) abort
-    call s:HaskellStackHealth('ready')
-    call deoplete#enable()
-  endfunction
-  let s:HaskellGhcModHandler = {
-    \ 'on_exit': function('s:HaskellGhcMod')
-    \ }
-
   function! s:HaskellPackagePath(job_id, data, event) abort
     let $GHC_PACKAGE_PATH = a:data[0]
-    if !executable('ghc-mod') || exepath('ghc-mod') is# expand('$HOME') . '/.local/bin/ghc-mod'
-      function! s:HaskellLazyLoad()
-        autocmd! haskell_lazy_load
-        augroup! haskell_lazy_load
-          call s:HaskellStackHealth('installing')
-          call jobstart('stack build ghc-mod', s:HaskellGhcModHandler)
-      endfunction
-
-      call s:HaskellStackHealth('initialized')
-      augroup haskell_lazy_load
-        au!
-        au InsertEnter *.hs call s:HaskellLazyLoad() | delfunction s:HaskellLazyLoad
-      augroup end
-    else
-      call s:HaskellStackHealth('ready')
-      call deoplete#enable()
+    if executable('hie')
+      let g:LanguageClient_serverCommands = {
+          \ 'haskell': ['hie', '--lsp'],
+          \ }
     endif
+    call s:HaskellStackHealth('initialized')
   endfunction
   let s:HaskellPackagePathHandler = {
    \ 'on_stdout': function('s:HaskellPackagePath')
@@ -106,12 +90,22 @@ function! s:HaskellSkel() abort
 endfunction
 
 function! s:HaskellSettings() abort
-  if executable('hoogle')
-    setlocal keywordprg=hoogle\ --info
+  if !g:haskell_ide_ready
+    if executable('hie')
+      LanguageClientStart
+      setlocal keywordprg=:call\ LanguageClient_textDocument_hover()
+      " setlocal keywordprg=hoogle\ --info
+    endif
+    call deoplete#enable()
+    call s:HaskellStackHealth('ready')
   endif
-  if executable('stylish-haskell')
-    setlocal formatprg=stylish-haskell
+  if executable('hie')
+    setlocal keywordprg=:call\ LanguageClient_textDocument_hover()
+    nnoremap <buffer><silent> gd :call LanguageClient_textDocument_definition()<CR>
   endif
+  " if executable('stylish-haskell')
+  "   setlocal formatprg=stylish-haskell
+  " endif
 endfunction
 
 augroup haskell_commands
@@ -125,7 +119,5 @@ augroup haskell_commands
   if filereadable('stack.yaml')
     au VimEnter * call s:HaskellSetup()
     au BufWritePost stack.yaml call s:HaskellSetup()
-  else
-    let g:deoplete#enable_at_startup = 1
   endif
 augroup end
