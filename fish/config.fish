@@ -24,6 +24,12 @@ set -x LESS "-qR"
 set -x JAVA_HOME /usr
 set -g fish_term24bit 1
 
+function cmus
+  mixer -s vol 80 > /dev/null
+  mixer -s pcm 80 > /dev/null
+  /usr/local/bin/cmus $args
+end
+
 set -g __fish_git_prompt_show_informative_status 1
 set -g __fish_git_prompt_hide_untrackedfiles 1
 
