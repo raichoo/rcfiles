@@ -1,4 +1,11 @@
 #!/bin/sh
-mixer -s pcm 60
+mixer -s pcm 80 vol 80
+
 ~/.fehbg
+
+sakura -t jabber.ccc.de --class=chat --geometry=+32+22 -c 125 -r 55 -x 'jackline -f .config/xmpp/jabber.ccc.de'&
+sakura -t jabber.otr.im --class=chat --geometry=+32+857 -c 125 -r 35 -x 'jackline -f .config/xmpp/jabber.otr.im'&
+sakura -t irssi --class=chat --geometry=+934+22 -c 225 -r 65 -x irssi&
+sakura -t top --class=monitor --geometry=+1996+1076 -x 'top -P -s 5'&
+
 exec cwm

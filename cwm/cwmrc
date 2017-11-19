@@ -33,13 +33,14 @@ bind-mouse M-3 unmap
 bind-mouse CMS-3 unmap
 
 # configuration
-bind-key 4S-Return "/usr/home/raichoo/Local/bin/sakura --login"
+bind-key 4S-Return terminal
 bind-key 4S-c window-delete
 bind-key 4-l window-menu-label
 bind-key 4-m window-maximize
 bind-key 4S-l lock
 bind-key 4S-q quit
-bind-key 4-r menu-exec
+bind-key 4-r menu-cmd
+bind-key 4S-r menu-exec
 bind-key 4-f window-fullscreen
 bind-key 4S-f window-freeze
 bind-key 4-h window-hide
@@ -95,6 +96,8 @@ bind-mouse 4-2 window-resize
 bind-mouse 4-1 window-move
 bind-mouse 4-2 window-resize
 
+bind-mouse 3 menu-cmd
+
 snapdist 10
 sticky yes
 moveamount 10
@@ -106,4 +109,18 @@ color font "#FFFFFF"
 color selfont "#66D9EF"
 
 command lock slock
-command term "/usr/home/raichoo/Local/bin/sakura --login"
+command term "sakura --login"
+
+command cmus "sakura -t cmus -d Audio -x 'fish -c cmus'"
+command firefox firefox
+command gstat "sakura -t gstat --class=monitor --geometry=+1429+1076 -x gstat"
+command irssi "sakura -t irssi --class=chat --geometry=+934+22 -c 225 -r 65 -x irssi"
+command jabber.ccc.de "sakura -t jabber.ccc.de --class=chat --geometry=+32+22 -c 125 -r 55 -x 'jackline -f .config/xmpp/jabber.ccc.de'"
+command jabber.otr.im "sakura -t jabber.otr.im --class=chat --geometry=+32+857 -c 125 -r 35 -x 'jackline -f .config/xmpp/jabber.otr.im'"
+command netstat "sakura -t netstat --class=monitor --geometry=+1429+1076 -x 'systat -net 5'"
+command top "sakura -t top --class=monitor --geometry=+1996+1076 -x 'top -P -s 5'"
+command vmstat "sakura -t vmstat --class=monitor --geometry=+1429+1076 -x 'systat -vm 5'"
+command wttr "sakura -t wttr -c 125 -r 45 -x 'curl wttr.in' -h"
+
+autogroup 0 "monitor"
+autogroup 1 "chat"
