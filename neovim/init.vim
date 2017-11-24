@@ -19,9 +19,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'raichoo/smt-vim'
 Plug 'pbrisbin/vim-syntax-shakespeare'
 Plug 'neovimhaskell/haskell-vim'
-" Plug 'eagletmt/neco-ghc'
 Plug 'dag/vim-fish'
-" Plug 'Superbil/llvm.vim'
 
 " git
 Plug 'airblade/vim-gitgutter'
