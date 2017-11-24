@@ -1,4 +1,4 @@
-let g:haskell_ide_ready = 0
+let g:haskell_ide_state = ''
 
 if executable('hasktags')
   function! s:HaskellRebuildTagsFinished(job_id, data, event) abort
@@ -31,14 +31,14 @@ function! s:HaskellSetup() abort
   function! s:HaskellStackHealth(state)
     if a:state is# 'ready'
       let l:health = '%#HaskellReadyLTS#'
-      let g:haskell_ide_ready = 1
-    elseif a:state is# 'installing'
+    elseif a:state is# 'missing'
       let l:health = '%#HaskellInitLTS#●'
     elseif a:state is# 'initialized'
       let l:health = '%#HaskellInitLTS#'
     elseif a:state is# 'unintialized'
       let l:health = '%#HaskellUninitLTS#'
     endif
+    let g:haskell_ide_state = a:state
     let g:airline_section_x = airline#section#create(['filetype', ' ', l:health . g:haskell_stack_resolver])
     AirlineRefresh
   endfunction
@@ -49,8 +49,11 @@ function! s:HaskellSetup() abort
       let g:LanguageClient_serverCommands = {
           \ 'haskell': ['hie', '--lsp'],
           \ }
+      call s:HaskellStackHealth('initialized')
+    else
+      call s:HaskellStackHealth('missing')
     endif
-    call s:HaskellStackHealth('initialized')
+
   endfunction
   let s:HaskellPackagePathHandler = {
    \ 'on_stdout': function('s:HaskellPackagePath')
@@ -90,22 +93,19 @@ function! s:HaskellSkel() abort
 endfunction
 
 function! s:HaskellSettings() abort
-  if !g:haskell_ide_ready
-    if executable('hie')
-      LanguageClientStart
-      setlocal keywordprg=:call\ LanguageClient_textDocument_hover()
-      " setlocal keywordprg=hoogle\ --info
-    endif
+  if executable('stylish-haskell')
+    setlocal formatprg=stylish-haskell
+  endif
+
+  if g:haskell_ide_state is# 'initialized'
+    LanguageClientStart
+    setlocal keywordprg=:call\ LanguageClient_textDocument_hover()
     call deoplete#enable()
     call s:HaskellStackHealth('ready')
+  else if g:haskell_ide_state is# 'missing'
+    setlocal keywordprg=hoogle\ --info
+    call deoplete#enable()
   endif
-  if executable('hie')
-    setlocal keywordprg=:call\ LanguageClient_textDocument_hover()
-    nnoremap <buffer><silent> gd :call LanguageClient_textDocument_definition()<CR>
-  endif
-  " if executable('stylish-haskell')
-  "   setlocal formatprg=stylish-haskell
-  " endif
 endfunction
 
 augroup haskell_commands
