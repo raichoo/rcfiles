@@ -23,28 +23,42 @@ if executable('hasktags')
   command! Hasktags call s:HaskellRebuildTags()
 endif
 
+function! s:HaskellStackHealth(state)
+  if a:state is# 'ready'
+    let l:health = '%#HaskellReadyLTS#'
+  elseif a:state is# 'missing'
+    let l:health = '%#HaskellInitLTS#●'
+  elseif a:state is# 'initialized'
+    let l:health = '%#HaskellInitLTS#'
+  elseif a:state is# 'unintialized'
+    let l:health = '%#HaskellUninitLTS#'
+  endif
+  let g:haskell_ide_state = a:state
+  let g:airline_section_x = airline#section#create(['filetype', ' ', l:health . g:haskell_stack_resolver])
+  AirlineRefresh
+endfunction
+
 function! s:HaskellSetup() abort
   highlight HaskellUninitLTS guifg=#EF5939 guibg=#465457
   highlight HaskellReadyLTS  guifg=#B8E673 guibg=#465457
   highlight HaskellInitLTS   guifg=#E6DB74 guibg=#465457
 
-  function! s:HaskellStackHealth(state)
-    if a:state is# 'ready'
-      let l:health = '%#HaskellReadyLTS#'
-    elseif a:state is# 'missing'
-      let l:health = '%#HaskellInitLTS#●'
-    elseif a:state is# 'initialized'
-      let l:health = '%#HaskellInitLTS#'
-    elseif a:state is# 'unintialized'
-      let l:health = '%#HaskellUninitLTS#'
+  let g:haskell_original_path = get(g:, 'haskell_original_path', $PATH)
+
+  if g:haskell_ide_state is# 'ready'
+    let g:haskell_ide_state = ''
+    if executable('hie')
+      LanguageClientStop
     endif
-    let g:haskell_ide_state = a:state
-    let g:airline_section_x = airline#section#create(['filetype', ' ', l:health . g:haskell_stack_resolver])
-    AirlineRefresh
-  endfunction
+  endif
 
   function! s:HaskellPackagePath(job_id, data, event) abort
-    let $GHC_PACKAGE_PATH = a:data[0]
+    let l:path = a:data[0]
+
+    if l:path isnot# ''
+      let $GHC_PACKAGE_PATH = l:path
+    endif
+
     if executable('hie')
       let g:LanguageClient_serverCommands = {
           \ 'haskell': ['hie', '--lsp'],
@@ -53,14 +67,18 @@ function! s:HaskellSetup() abort
     else
       call s:HaskellStackHealth('missing')
     endif
-
   endfunction
   let s:HaskellPackagePathHandler = {
    \ 'on_stdout': function('s:HaskellPackagePath')
    \ }
 
   function! s:HaskellPath(job_id, data, event) abort
-    let $PATH = a:data[0]
+    let l:path = a:data[0]
+
+    if l:path isnot# ''
+      let $PATH = l:path
+    endif
+
     call jobstart('env PATH=' . g:haskell_original_path . ' stack exec printenv GHC_PACKAGE_PATH', s:HaskellPackagePathHandler)
   endfunction
   let s:HaskellPathHandler = {
@@ -74,7 +92,6 @@ function! s:HaskellSetup() abort
     if !isdirectory(expand('$HOME') . '/.stack/snapshots/x86_64-freebsd/' . g:haskell_stack_resolver)
       call s:HaskellStackHealth('unintialized')
     else
-      let g:haskell_original_path = get(g:, 'haskell_original_path', $PATH)
       call jobstart('env PATH=' . g:haskell_original_path . ' stack exec printenv PATH', s:HaskellPathHandler)
     endif
   endif
