@@ -117,11 +117,9 @@ function! s:HaskellSettings() abort
   if g:haskell_ide_state is# 'initialized'
     LanguageClientStart
     setlocal keywordprg=:call\ LanguageClient_textDocument_hover()
-    call deoplete#enable()
     call s:HaskellStackHealth('ready')
   elseif g:haskell_ide_state is# 'missing'
     setlocal keywordprg=hoogle\ --info
-    call deoplete#enable()
   endif
 endfunction
 
