@@ -8,4 +8,6 @@ sakura -t jabber.otr.im --class=chat --geometry=+32+857 -c 125 -r 35 -x 'jacklin
 sakura -t irssi --class=chat --geometry=+934+22 -c 225 -r 65 -x irssi&
 sakura -t top --class=monitor --geometry=+1996+1076 -x 'top -P -s 5'&
 
+batterymonitor&
+
 exec cwm

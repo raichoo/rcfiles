@@ -1,0 +1,25 @@
+#!/bin/sh
+
+while true; do
+  if [ "$(sysctl -n hw.acpi.battery.time)" -ne -1 ]; then
+    POWER="$(sysctl -n hw.acpi.battery.life)"
+
+    if [ $POWER -le 10 ]; then
+      notify-send -u critical "${POWER}% Battery (obtain power immediately)"
+      sleep 60
+    elif [ $POWER -le 20 ]; then
+      notify-send -u critical "${POWER}% Battery"
+      sleep 120
+    elif [ $POWER -le 30 ]; then
+      notify-send -u critical "${POWER}% Battery"
+      sleep 180
+    elif [ $POWER -le 40 ]; then
+      notify-send "${POWER}% Battery"
+      sleep 300
+    else
+      sleep 600
+    fi
+  else
+    sleep 600
+  fi
+done
