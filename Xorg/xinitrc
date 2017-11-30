@@ -1,3 +1,3 @@
 setxkbmap -option caps:escape
 xset m 4 1
-exec dbus-launch --exit-with-session ssh-agent /usr/home/raichoo/Sources/rcfiles/cwm/cwm-session
+exec dbus-launch --exit-with-session ssh-agent cwm-session
