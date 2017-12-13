@@ -20,7 +20,7 @@ set -x JAVA_HOME /usr
 set -g fish_term24bit 1
 
 function cmus
-  mixer -s vol 75 pcm 75 > /dev/null
+  setvolume
   /usr/local/bin/cmus $args
 end
 

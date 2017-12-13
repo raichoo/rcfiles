@@ -1,5 +1,5 @@
 #!/bin/sh
-mixer -s pcm 75 vol 75
+setvolume
 
 ~/.fehbg
 
