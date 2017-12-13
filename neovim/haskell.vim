@@ -57,15 +57,19 @@ function! s:HaskellSetup() abort
 
     if l:path isnot# ''
       let $GHC_PACKAGE_PATH = l:path
-    endif
 
-    if executable('hie')
-      let g:LanguageClient_serverCommands = {
-          \ 'haskell': ['hie', '--lsp'],
-          \ }
-      call s:HaskellStackHealth('initialized')
-    else
-      call s:HaskellStackHealth('missing')
+      if executable('hie')
+        let g:LanguageClient_serverCommands = {
+            \ 'haskell': ['hie', '--lsp'],
+            \ }
+        call s:HaskellStackHealth('initialized')
+
+        if &filetype is# 'haskell'
+          call s:HaskellSettings()
+        endif
+      else
+        call s:HaskellStackHealth('missing')
+      endif
     endif
   endfunction
   let s:HaskellPackagePathHandler = {
@@ -77,9 +81,9 @@ function! s:HaskellSetup() abort
 
     if l:path isnot# ''
       let $PATH = l:path
-    endif
 
-    call jobstart('env PATH=' . g:haskell_original_path . ' stack exec printenv GHC_PACKAGE_PATH', s:HaskellPackagePathHandler)
+      call jobstart('env PATH=' . g:haskell_original_path . ' stack exec printenv GHC_PACKAGE_PATH', s:HaskellPackagePathHandler)
+    endif
   endfunction
   let s:HaskellPathHandler = {
    \ 'on_stdout': function('s:HaskellPath')
@@ -116,9 +120,12 @@ function! s:HaskellSettings() abort
 
   if g:haskell_ide_state is# 'initialized'
     LanguageClientStart
-    setlocal keywordprg=:call\ LanguageClient_textDocument_hover()
     call s:HaskellStackHealth('ready')
-  elseif g:haskell_ide_state is# 'missing'
+  endif
+
+  if g:haskell_ide_state is# 'ready'
+    setlocal keywordprg=:call\ LanguageClient_textDocument_hover()
+  elseif g:haskell_ide_state is# 'missing' && executable('hoogle')
     setlocal keywordprg=hoogle\ --info
   endif
 endfunction
