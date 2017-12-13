@@ -3,10 +3,10 @@ setvolume
 
 ~/.fehbg
 
-sakura -t jabber.ccc.de --class=chat --geometry=+32+22 -c 125 -r 55 -x 'jackline -f .config/xmpp/jabber.ccc.de'&
-sakura -t jabber.otr.im --class=chat --geometry=+32+857 -c 125 -r 35 -x 'jackline -f .config/xmpp/jabber.otr.im'&
-sakura -t irssi --class=chat --geometry=+934+22 -c 225 -r 65 -x irssi&
-sakura -t top --class=monitor --geometry=+1996+1076 -x 'top -P -s 5'&
+st -t jabber.ccc.de -c chat -g 125x55+32+22 -e jackline -f .config/xmpp/jabber.ccc.de&
+st -t jabber.otr.im -c chat -g 125x35+32+857 -e jackline -f .config/xmpp/jabber.otr.im&
+st -t irssi -c chat -g 228x68+936+22 -e irssi&
+st -t top -c monitor -g +1994+1074 -e top -P -s 5&
 
 batterymonitor&
 
