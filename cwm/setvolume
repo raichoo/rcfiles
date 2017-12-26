@@ -2,10 +2,13 @@
 
 AUDEV="$(sysctl -n hw.snd.default_unit)"
 
-if [ $AUDEV -eq 3 ]; then
-  mixer -s vol 20 pcm 20 > /dev/null
-elif [ $AUDEV -eq 1 ]; then
-  mixer -s vol 50 pcm 50 > /dev/null
-else
-  mixer -s vol 75 pcm 75 > /dev/null
-fi
+case $AUDEV in
+  1)
+    mixer -s vol 75 pcm 75 > /dev/null
+    ;;
+  3)
+    mixer -s vol 20 pcm 20 > /dev/null
+    ;;
+  *)
+    mixer -s vol 50 pcm 50 > /dev/null
+esac
