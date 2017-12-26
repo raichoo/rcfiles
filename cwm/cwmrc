@@ -1,36 +1,6 @@
 #disable default mappings
-bind-key CM-Return unmap
-bind-key CM-Delete unmap
-bind-key M-Return unmap
-bind-key M-Down unmap
-bind-key M-Up unmap
-bind-key CM-n unmap
-bind-key M-Tab unmap
-bind-key MS-Tab unmap
-bind-key CM-x unmap
-bind-key CM-0 unmap
-bind-key CM-g unmap
-bind-key M-Right unmap
-bind-key M-Left unmap
-bind-key CMS-f unmap
-bind-key CM-s unmap
-bind-key CM-f unmap
-bind-key CM-m unmap
-bind-key CM-w unmap
-#bind-key CMS-r unmap
-bind-key CMS-q unmap
-bind-key CS-Left unmap
-bind-key CS-Right unmap
-bind-key C-Up unmap
-bind-key C-Down unmap
-bind-key C-Left unmap
-bind-key C-Right unmap
-
-bind-mouse M-1 unmap
-bind-mouse CM-1 unmap
-bind-mouse M-2 unmap
-bind-mouse M-3 unmap
-bind-mouse CMS-3 unmap
+unbind-key all
+unbind-mouse all
 
 # configuration
 bind-key 4S-Return terminal
@@ -90,23 +60,28 @@ bind-key 4S-Up window-move-up-big
 bind-key 4S-Down window-move-down-big
 bind-key 4S-Left window-move-left-big
 bind-key 4S-Right window-move-right-big
+bind-key 4-g window-group
+bind-key CMS-r restart
 
 bind-mouse 4-1 window-move
 bind-mouse 4-2 window-resize
 bind-mouse 4-1 window-move
 bind-mouse 4-2 window-resize
 
-bind-mouse 3 menu-cmd
+bind-mouse 4M-1 menu-window
 
 snapdist 10
 sticky yes
 moveamount 10
-
 fontname "Inconsolata:size=10.21"
+
 color menubg "#282C34"
 color menufg "#282C34"
 color font "#FFFFFF"
 color selfont "#66D9EF"
+color urgencyborder "#F92672"
+color ungroupborder "#EF5939"
+color groupborder "#B8E673"
 
 command lock slock
 command term "st"
