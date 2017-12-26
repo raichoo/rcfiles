@@ -12,6 +12,10 @@ end
 
 set -x EDITOR /usr/home/raichoo/Local/bin/nvim
 
+set -x DARCS_ALWAYS_COLOR 1
+set -x DARCS_ALTERNATIVE_COLOR 1
+set -x DARCS_DO_COLOR_LINES 1
+
 set -x MANPAGER "nvim -c 'set ft=man' -"
 set -x BROWSER (which firefox)
 set -x PAGER "less"
