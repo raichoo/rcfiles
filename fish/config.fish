@@ -20,7 +20,6 @@ set -x MANPAGER "nvim -c 'set ft=man' -"
 set -x BROWSER (which firefox)
 set -x PAGER "less"
 set -x LESS "-qR"
-set -x JAVA_HOME /usr
 set -g fish_term24bit 1
 
 function cmus
