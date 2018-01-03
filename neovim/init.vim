@@ -20,6 +20,7 @@ Plug 'raichoo/smt-vim'
 Plug 'pbrisbin/vim-syntax-shakespeare'
 Plug 'neovimhaskell/haskell-vim'
 Plug 'dag/vim-fish'
+Plug 'rust-lang/rust.vim'
 
 " git
 Plug 'airblade/vim-gitgutter'
