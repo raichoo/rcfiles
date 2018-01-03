@@ -3,6 +3,9 @@
 AUDEV="$(sysctl -n hw.snd.default_unit)"
 
 case $AUDEV in
+  0)
+    mixer -s vol 90 pcm 90 > /dev/null
+    ;;
   1)
     mixer -s vol 75 pcm 75 > /dev/null
     ;;
