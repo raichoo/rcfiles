@@ -89,7 +89,7 @@ function time_prompt
   if test $status = 0
     printf "%s" (set_color --bold B8E673)
   else
-    printf "%s" (set_color --bold EF5939)
+    printf "\a%s" (set_color --bold EF5939)
   end
   printf "%s%s" (date +"%T") (set_color normal)
 end
