@@ -22,11 +22,6 @@ set -x PAGER "less"
 set -x LESS "-qR"
 set -g fish_term24bit 1
 
-function cmus
-  setvolume
-  /usr/local/bin/cmus $args
-end
-
 set -g __fish_git_prompt_show_informative_status 1
 set -g __fish_git_prompt_hide_untrackedfiles 1
 

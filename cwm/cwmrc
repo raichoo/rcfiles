@@ -86,7 +86,7 @@ color groupborder "#B8E673"
 command lock slock
 command term "st"
 
-command cmus "st -t cmus -e fish -c cmus"
+command cmus "st -t cmus -e cmus"
 command firefox firefox
 command gstat "st -t gstat -c monitor -g +1427+1074 -e gstat"
 command irssi "st -t irssi -c chat -g 228x68+936+22 -e irssi"
