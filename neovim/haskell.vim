@@ -52,24 +52,33 @@ function! s:HaskellSetup() abort
     endif
   endif
 
+  function! s:HaskellSetupEnv() abort
+    let l:lts_prefix = matchstr(get(g:, 'haskell_stack_resolver', ''), '^[^.]*')
+
+    if l:lts_prefix isnot# ''
+      let l:envpath = $HOME . '/Local/ghc-env/' . l:lts_prefix
+      let $PATH = l:envpath . ':' . $PATH
+      if executable('hie')
+        let g:LanguageClient_serverCommands = {
+            \ 'haskell': ['hie', '--lsp'],
+            \ }
+        call s:HaskellStackHealth('initialized')
+      else
+        call s:HaskellStackHealth('missing')
+      endif
+      if &filetype is# 'haskell'
+        call s:HaskellSettings()
+      endif
+    endif
+  endfunction
+
   function! s:HaskellPackagePath(job_id, data, event) abort
     let l:path = a:data[0]
 
     if l:path isnot# ''
       let $GHC_PACKAGE_PATH = l:path
 
-      if executable('hie')
-        let g:LanguageClient_serverCommands = {
-            \ 'haskell': ['hie', '--lsp'],
-            \ }
-        call s:HaskellStackHealth('initialized')
-
-        if &filetype is# 'haskell'
-          call s:HaskellSettings()
-        endif
-      else
-        call s:HaskellStackHealth('missing')
-      endif
+      call s:HaskellSetupEnv()
     endif
   endfunction
   let s:HaskellPackagePathHandler = {
