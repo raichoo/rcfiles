@@ -1,0 +1,19 @@
+#!/bin/sh
+
+case $1 in
+  "speakers")
+    sysctl hw.snd.default_unit=0
+    mixer -s vol 90 pcm 90 > /dev/null
+    ;;
+  "headphones")
+    sysctl hw.snd.default_unit=1
+    mixer -s vol 75 pcm 75 > /dev/null
+    ;;
+  "dock")
+    sysctl hw.snd.default_unit=3
+    mixer -s vol 20 pcm 20 > /dev/null
+    ;;
+  *)
+    echo "unknown output"
+    ;;
+esac
