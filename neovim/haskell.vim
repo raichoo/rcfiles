@@ -39,7 +39,7 @@ function! s:HaskellHealth(state, resolver)
   AirlineRefresh
 endfunction
 
-function! s:HaskellSetup() abort
+function! s:HaskellSetup(...) abort
   highlight HaskellUninitLTS guifg=#EF5939 guibg=#465457
   highlight HaskellReadyLTS  guifg=#B8E673 guibg=#465457
   highlight HaskellInitLTS   guifg=#E6DB74 guibg=#465457
@@ -91,27 +91,33 @@ function! s:HaskellSetup() abort
    \ 'on_stdout': function('s:HaskellPath')
    \ }
 
-  let l:resolver = systemlist('grep "^resolver:" stack.yaml | cut -d" " -f2')[0]
+  if a:0
+    let l:envpath = $HOME . '/Local/ghc-env/' . a:1
 
-  if l:resolver isnot# get(g:, 'haskell_resolver', '')
-    let g:haskell_resolver = l:resolver
-    let l:lts_prefix = matchstr(l:resolver, '^[^.]*')
-    let l:envpath = $HOME . '/Local/ghc-env/' . l:lts_prefix
-
-    if l:lts_prefix isnot# '' && isdirectory(l:envpath)
-      let $PATH = l:envpath . ':' . $PATH
-
-      if isdirectory(expand('$HOME') . '/.stack/snapshots/x86_64-freebsd/' . g:haskell_resolver)
-
-        call s:HaskellHealth('uninitialized', get(g:, 'haskell_resolver', '[unknown]'))
-        call jobstart('env PATH=' . l:envpath . ':' . g:haskell_original_path . ' stack --no-install-ghc exec printenv PATH', s:HaskellPathHandler)
-      endif
+    if isdirectory(l:envpath)
+      let $PATH = l:envpath . ':' . g:haskell_original_path
+      call s:HaskellHealth('ready', a:1)
     endif
   else
-    call s:HaskellHealth('ready', get(g:, 'haskell_resolver', '[unknown]'))
+    let l:resolver = systemlist('grep "^resolver:" stack.yaml | cut -d" " -f2')[0]
+
+    if l:resolver isnot# get(g:, 'haskell_resolver', '')
+      let g:haskell_resolver = l:resolver
+      let l:lts_prefix = matchstr(l:resolver, '^[^.]*')
+      let l:envpath = $HOME . '/Local/ghc-env/' . l:lts_prefix
+
+      if l:lts_prefix isnot# '' && isdirectory(l:envpath)
+        if isdirectory(expand('$HOME') . '/.stack/snapshots/x86_64-freebsd/' . g:haskell_resolver)
+          call s:HaskellHealth('uninitialized', get(g:, 'haskell_resolver', '[unknown]'))
+          call jobstart('env PATH=' . l:envpath . ':' . g:haskell_original_path . ' stack --no-install-ghc exec printenv PATH', s:HaskellPathHandler)
+        endif
+      endif
+    else
+      call s:HaskellHealth('ready', get(g:, 'haskell_resolver', '[unknown]'))
+    endif
   endif
 endfunction
-command! HaskellSetup call s:HaskellSetup()
+command! -nargs=? HaskellSetup call s:HaskellSetup(<f-args>)
 
 function! s:HaskellSkel() abort
   if @% is# 'Main.hs'
