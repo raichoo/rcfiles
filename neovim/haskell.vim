@@ -53,22 +53,17 @@ function! s:HaskellSetup() abort
   endif
 
   function! s:HaskellSetupEnv() abort
-    let l:lts_prefix = matchstr(get(g:, 'haskell_stack_resolver', ''), '^[^.]*')
+    if executable('hie')
+      let g:LanguageClient_serverCommands = {
+          \ 'haskell': ['hie', '--lsp'],
+          \ }
+      call s:HaskellStackHealth('initialized')
+    else
+      call s:HaskellStackHealth('missing')
+    endif
 
-    if l:lts_prefix isnot# ''
-      let l:envpath = $HOME . '/Local/ghc-env/' . l:lts_prefix
-      let $PATH = l:envpath . ':' . $PATH
-      if executable('hie')
-        let g:LanguageClient_serverCommands = {
-            \ 'haskell': ['hie', '--lsp'],
-            \ }
-        call s:HaskellStackHealth('initialized')
-      else
-        call s:HaskellStackHealth('missing')
-      endif
-      if &filetype is# 'haskell'
-        call s:HaskellSettings()
-      endif
+    if &filetype is# 'haskell'
+      call s:HaskellSettings()
     endif
   endfunction
 
@@ -89,9 +84,17 @@ function! s:HaskellSetup() abort
     let l:path = a:data[0]
 
     if l:path isnot# ''
-      let $PATH = l:path
-
-      call jobstart('env PATH=' . g:haskell_original_path . ' stack exec printenv GHC_PACKAGE_PATH', s:HaskellPackagePathHandler)
+      let l:lts_prefix = matchstr(get(g:, 'haskell_stack_resolver'), '^[^.]*')
+      if l:lts_prefix isnot# ''
+        let l:envpath = $HOME . '/Local/ghc-env/' . l:lts_prefix
+        let $PATH = l:envpath . ':' . l:path
+        call jobstart('env PATH=' . l:envpath . ':' . g:haskell_original_path . ' stack --no-install-ghc exec printenv GHC_PACKAGE_PATH', s:HaskellPackagePathHandler)
+      else
+        let $PATH = l:path
+        call jobstart('env PATH=' . g:haskell_original_path . ' stack --no-install-ghc exec printenv GHC_PACKAGE_PATH', s:HaskellPackagePathHandler)
+      endif
+    else
+      call s:HaskellStackHealth('unintialized')
     endif
   endfunction
   let s:HaskellPathHandler = {
@@ -102,10 +105,19 @@ function! s:HaskellSetup() abort
 
   if l:resolver isnot# get(g:, 'haskell_stack_resolver', '')
     let g:haskell_stack_resolver = l:resolver
-    if !isdirectory(expand('$HOME') . '/.stack/snapshots/x86_64-freebsd/' . g:haskell_stack_resolver)
-      call s:HaskellStackHealth('unintialized')
+
+    let l:lts_prefix = matchstr(l:resolver, '^[^.]*')
+    if l:lts_prefix isnot# ''
+      let l:envpath = $HOME . '/Local/ghc-env/' . l:lts_prefix
+      let $PATH = l:envpath . ':' . $PATH
+
+      if !isdirectory(expand('$HOME') . '/.stack/snapshots/x86_64-freebsd/' . g:haskell_stack_resolver)
+        call s:HaskellStackHealth('unintialized')
+      else
+        call jobstart('env PATH=' . l:envpath . ':' . g:haskell_original_path . ' stack --no-install-ghc exec printenv PATH', s:HaskellPathHandler)
+      endif
     else
-      call jobstart('env PATH=' . g:haskell_original_path . ' stack exec printenv PATH', s:HaskellPathHandler)
+      call s:HaskellStackHealth('unintialized')
     endif
   endif
 endfunction
@@ -127,16 +139,16 @@ function! s:HaskellSettings() abort
     setlocal formatprg=stylish-haskell
   endif
 
-  if g:haskell_ide_state is# 'initialized'
-    LanguageClientStart
-    call s:HaskellStackHealth('ready')
-  endif
+  " if g:haskell_ide_state is# 'initialized'
+  "   LanguageClientStart
+  "   call s:HaskellStackHealth('ready')
+  " endif
 
-  if g:haskell_ide_state is# 'ready'
-    setlocal keywordprg=:call\ LanguageClient_textDocument_hover()
-  elseif g:haskell_ide_state is# 'missing' && executable('hoogle')
-    setlocal keywordprg=hoogle\ --info
-  endif
+  " if g:haskell_ide_state is# 'ready'
+  "   setlocal keywordprg=:call\ LanguageClient_textDocument_hover()
+  " elseif g:haskell_ide_state is# 'missing' && executable('hoogle')
+  "   setlocal keywordprg=hoogle\ --info
+  " endif
 endfunction
 
 augroup haskell_commands
