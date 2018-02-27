@@ -1,5 +1,3 @@
-let g:haskell_ide_state = ''
-
 if executable('hasktags')
   function! s:HaskellRebuildTagsFinished(job_id, data, event) abort
     let g:haskell_rebuild_tags = 0
@@ -23,18 +21,21 @@ if executable('hasktags')
   command! Hasktags call s:HaskellRebuildTags()
 endif
 
-function! s:HaskellStackHealth(state)
-  if a:state is# 'ready'
-    let l:health = '%#HaskellReadyLTS#'
-  elseif a:state is# 'missing'
-    let l:health = '%#HaskellInitLTS#●'
+function! s:HaskellHealth(state, resolver)
+  let l:health = ''
+
+  if a:state is# 'ide'
+    let l:health = '%#HaskellReadyLTS#●' . a:resolver
+  elseif a:state is# 'ready'
+    let l:health = '%#HaskellReadyLTS#' . a:resolver
   elseif a:state is# 'initialized'
-    let l:health = '%#HaskellInitLTS#'
+    let l:health = '%#HaskellInitLTS#' . a:resolver
   elseif a:state is# 'unintialized'
-    let l:health = '%#HaskellUninitLTS#'
+    let l:health = '%#HaskellUninitLTS#' . a:resolver
+  elseif a:state is# 'missing'
+    let l:health = '%#HaskellUninitLTS#[missing]'
   endif
-  let g:haskell_ide_state = a:state
-  let g:airline_section_x = airline#section#create(['filetype', ' ', l:health . g:haskell_stack_resolver])
+  let g:airline_section_x = airline#section#create(['filetype', ' ', l:health])
   AirlineRefresh
 endfunction
 
@@ -45,22 +46,10 @@ function! s:HaskellSetup() abort
 
   let g:haskell_original_path = get(g:, 'haskell_original_path', $PATH)
 
-  if g:haskell_ide_state is# 'ready'
-    let g:haskell_ide_state = ''
-    if executable('hie')
-      LanguageClientStop
-    endif
-  endif
+  call s:HaskellHealth('missing', '')
 
   function! s:HaskellSetupEnv() abort
-    if executable('hie')
-      let g:LanguageClient_serverCommands = {
-          \ 'haskell': ['hie', '--lsp'],
-          \ }
-      call s:HaskellStackHealth('initialized')
-    else
-      call s:HaskellStackHealth('missing')
-    endif
+    call s:HaskellHealth('ready', get(g:, 'haskell_resolver', '[unknown]'))
 
     if &filetype is# 'haskell'
       call s:HaskellSettings()
@@ -84,17 +73,18 @@ function! s:HaskellSetup() abort
     let l:path = a:data[0]
 
     if l:path isnot# ''
-      let l:lts_prefix = matchstr(get(g:, 'haskell_stack_resolver'), '^[^.]*')
+      let l:lts_prefix = matchstr(get(g:, 'haskell_resolver'), '^[^.]*')
+      call s:HaskellHealth('initialized', get(g:, 'haskell_resolver', '[unknown]'))
       if l:lts_prefix isnot# ''
         let l:envpath = $HOME . '/Local/ghc-env/' . l:lts_prefix
         let $PATH = l:envpath . ':' . l:path
+
         call jobstart('env PATH=' . l:envpath . ':' . g:haskell_original_path . ' stack --no-install-ghc exec printenv GHC_PACKAGE_PATH', s:HaskellPackagePathHandler)
       else
         let $PATH = l:path
+
         call jobstart('env PATH=' . g:haskell_original_path . ' stack --no-install-ghc exec printenv GHC_PACKAGE_PATH', s:HaskellPackagePathHandler)
       endif
-    else
-      call s:HaskellStackHealth('unintialized')
     endif
   endfunction
   let s:HaskellPathHandler = {
@@ -103,22 +93,22 @@ function! s:HaskellSetup() abort
 
   let l:resolver = systemlist('grep "^resolver:" stack.yaml | cut -d" " -f2')[0]
 
-  if l:resolver isnot# get(g:, 'haskell_stack_resolver', '')
-    let g:haskell_stack_resolver = l:resolver
-
+  if l:resolver isnot# get(g:, 'haskell_resolver', '')
+    let g:haskell_resolver = l:resolver
     let l:lts_prefix = matchstr(l:resolver, '^[^.]*')
-    if l:lts_prefix isnot# ''
-      let l:envpath = $HOME . '/Local/ghc-env/' . l:lts_prefix
+    let l:envpath = $HOME . '/Local/ghc-env/' . l:lts_prefix
+
+    if l:lts_prefix isnot# '' && isdirectory(l:envpath)
       let $PATH = l:envpath . ':' . $PATH
 
-      if !isdirectory(expand('$HOME') . '/.stack/snapshots/x86_64-freebsd/' . g:haskell_stack_resolver)
-        call s:HaskellStackHealth('unintialized')
-      else
+      if isdirectory(expand('$HOME') . '/.stack/snapshots/x86_64-freebsd/' . g:haskell_resolver)
+
+        call s:HaskellHealth('uninitialized', get(g:, 'haskell_resolver', '[unknown]'))
         call jobstart('env PATH=' . l:envpath . ':' . g:haskell_original_path . ' stack --no-install-ghc exec printenv PATH', s:HaskellPathHandler)
       endif
-    else
-      call s:HaskellStackHealth('unintialized')
     endif
+  else
+    call s:HaskellHealth('ready', get(g:, 'haskell_resolver', '[unknown]'))
   endif
 endfunction
 command! HaskellSetup call s:HaskellSetup()
@@ -141,7 +131,7 @@ function! s:HaskellSettings() abort
 
   " if g:haskell_ide_state is# 'initialized'
   "   LanguageClientStart
-  "   call s:HaskellStackHealth('ready')
+  "   call s:HaskellHealth('ready')
   " endif
 
   " if g:haskell_ide_state is# 'ready'
