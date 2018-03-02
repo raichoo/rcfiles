@@ -30,10 +30,10 @@ function! s:HaskellHealth(state, resolver)
     let l:health = '%#HaskellReadyLTS#' . a:resolver
   elseif a:state is# 'initialized'
     let l:health = '%#HaskellInitLTS#' . a:resolver
-  elseif a:state is# 'unintialized'
+  elseif a:state is# 'uninitialized'
     let l:health = '%#HaskellUninitLTS#' . a:resolver
   elseif a:state is# 'missing'
-    let l:health = '%#HaskellUninitLTS#[missing]'
+    let l:health = a:resolver
   endif
   let g:airline_section_x = airline#section#create(['filetype', ' ', l:health])
   AirlineRefresh
@@ -45,8 +45,6 @@ function! s:HaskellSetup(...) abort
   highlight HaskellInitLTS   guifg=#E6DB74 guibg=#465457
 
   let g:haskell_original_path = get(g:, 'haskell_original_path', $PATH)
-
-  call s:HaskellHealth('missing', '')
 
   function! s:HaskellSetupEnv() abort
     call s:HaskellHealth('ready', get(g:, 'haskell_resolver', '[unknown]'))
@@ -61,6 +59,7 @@ function! s:HaskellSetup(...) abort
 
     if l:path isnot# ''
       let $GHC_PACKAGE_PATH = l:path
+      call s:HaskellHealth('initialized', get(g:, 'haskell_resolver', '[unknown]'))
 
       call s:HaskellSetupEnv()
     endif
@@ -74,7 +73,6 @@ function! s:HaskellSetup(...) abort
 
     if l:path isnot# ''
       let l:lts_prefix = matchstr(get(g:, 'haskell_resolver'), '^[^.]*')
-      call s:HaskellHealth('initialized', get(g:, 'haskell_resolver', '[unknown]'))
       if l:lts_prefix isnot# ''
         let l:envpath = $HOME . '/Local/ghc-env/' . l:lts_prefix
         let $PATH = l:envpath . ':' . l:path
@@ -93,6 +91,7 @@ function! s:HaskellSetup(...) abort
 
   if a:0
     let l:envpath = $HOME . '/Local/ghc-env/' . a:1
+    call s:HaskellHealth('missing', a:1)
 
     if isdirectory(l:envpath)
       let $PATH = l:envpath . ':' . g:haskell_original_path
@@ -101,19 +100,20 @@ function! s:HaskellSetup(...) abort
   else
     let l:resolver = systemlist('grep "^resolver:" stack.yaml | cut -d" " -f2')[0]
 
-    if l:resolver isnot# get(g:, 'haskell_resolver', '')
-      let g:haskell_resolver = l:resolver
-      let l:lts_prefix = matchstr(l:resolver, '^[^.]*')
-      let l:envpath = $HOME . '/Local/ghc-env/' . l:lts_prefix
+    let g:haskell_resolver = l:resolver
+    let l:lts_prefix = matchstr(l:resolver, '^[^.]*')
+    let l:envpath = $HOME . '/Local/ghc-env/' . l:lts_prefix
+    if isdirectory(l:envpath)
+      let $PATH = l:envpath . ':' . g:haskell_original_path
 
       if l:lts_prefix isnot# '' && isdirectory(l:envpath)
-        if isdirectory(expand('$HOME') . '/.stack/snapshots/x86_64-freebsd/' . g:haskell_resolver)
-          call s:HaskellHealth('uninitialized', get(g:, 'haskell_resolver', '[unknown]'))
+        call s:HaskellHealth('uninitialized', get(g:, 'haskell_resolver', '[unknown]'))
+        if isdirectory($HOME . '/.stack/snapshots/x86_64-freebsd/' . g:haskell_resolver)
           call jobstart('env PATH=' . l:envpath . ':' . g:haskell_original_path . ' stack --no-install-ghc exec printenv PATH', s:HaskellPathHandler)
         endif
       endif
     else
-      call s:HaskellHealth('ready', get(g:, 'haskell_resolver', '[unknown]'))
+      call s:HaskellHealth('missing', l:resolver)
     endif
   endif
 endfunction
@@ -133,6 +133,10 @@ endfunction
 function! s:HaskellSettings() abort
   if executable('stylish-haskell')
     setlocal formatprg=stylish-haskell
+  endif
+
+  if executable('hoogle')
+    setlocal keywordprg=hoogle\ --info
   endif
 
   " if g:haskell_ide_state is# 'initialized'
