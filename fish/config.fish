@@ -1,9 +1,6 @@
-# OPAM configuration
-
-source /usr/home/raichoo/.opam/opam-init/init.fish > /dev/null 2> /dev/null or true
-
 # setup paths
 if status --is-login
+  source /usr/home/raichoo/.opam/opam-init/init.fish > /dev/null 2> /dev/null or true
   set -x PATH /usr/home/raichoo/Local/bin /usr/home/raichoo/.local/bin $PATH
   #  set -x MANPATH /usr/home/raichoo/Local/man $MANPATH
   set -x PYTHONPATH /usr/home/raichoo/.local/lib/python3.6/site-packages /usr/home/raichoo/Local/python/lib/python2.7/site-packages /usr/home/raichoo/Local/z3/lib/python2.7/dist-packages $PYTHONPATH
