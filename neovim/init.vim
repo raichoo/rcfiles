@@ -1,5 +1,6 @@
 call plug#begin('~/.nvim/plugged')
 
+let g:python3_host_prog = '/usr/local/bin/python3.6'
 " essential
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
