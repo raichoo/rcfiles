@@ -74,7 +74,7 @@ function! s:HaskellSetup(...) abort
     if l:path isnot# ''
       let l:lts_prefix = matchstr(get(g:, 'haskell_resolver'), '^[^.]*')
       if l:lts_prefix isnot# ''
-        let l:envpath = $HOME . '/Local/ghc-env/' . l:lts_prefix
+        let l:envpath = $HOME . '/Local/ghc/' . l:lts_prefix . '/bin'
         let $PATH = l:envpath . ':' . l:path
 
         call jobstart('env PATH=' . l:envpath . ':' . g:haskell_original_path . ' stack --no-install-ghc exec printenv GHC_PACKAGE_PATH', s:HaskellPackagePathHandler)
@@ -90,7 +90,7 @@ function! s:HaskellSetup(...) abort
    \ }
 
   if a:0
-    let l:envpath = $HOME . '/Local/ghc-env/' . a:1
+    let l:envpath = $HOME . '/Local/ghc/' . a:1 . '/bin'
     call s:HaskellHealth('missing', a:1)
 
     if isdirectory(l:envpath)
@@ -102,7 +102,7 @@ function! s:HaskellSetup(...) abort
 
     let g:haskell_resolver = l:resolver
     let l:lts_prefix = matchstr(l:resolver, '^[^.]*')
-    let l:envpath = $HOME . '/Local/ghc-env/' . l:lts_prefix
+    let l:envpath = $HOME . '/Local/ghc/' . l:lts_prefix . '/bin'
     if isdirectory(l:envpath)
       let $PATH = l:envpath . ':' . g:haskell_original_path
 
