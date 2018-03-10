@@ -22,6 +22,7 @@ Plug 'pbrisbin/vim-syntax-shakespeare'
 Plug 'neovimhaskell/haskell-vim'
 Plug 'dag/vim-fish'
 Plug 'rust-lang/rust.vim'
+Plug 'derekelkins/agda-vim'
 
 " git
 Plug 'airblade/vim-gitgutter'
@@ -173,7 +174,10 @@ augroup commands
   au TermOpen * setlocal nonumber norelativenumber
   au BufNewFile,BufRead *.d setf dtrace
   au BufNewFile,BufRead *.c,*.h setlocal tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab
+  au BufNewFile,BufRead *.agda setf agda
 augroup end
+
+let g:agda_extraincpaths = ["/usr/home/raichoo/Sources/agda-stdlib-0.14/src"]
 
 let g:netrw_banner = 0
 let g:netrw_liststyle = 3
