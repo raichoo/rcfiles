@@ -45,11 +45,13 @@ bind-key 4M-8 group-toggle-8
 bind-key 4M-9 group-toggle-9
 bind-key 4-Up window-lower
 bind-key 4-Down window-raise
+bind-key 4-u window-raise
+bind-key 4-d window-lower
 bind-key 4-Tab window-cycle
 bind-key 4S-Tab window-rcycle
-bind-key 4-Page_Down group-cycle
-bind-key 4-Page_Up group-rcycle
-bind-key 4S-7 menu-window
+bind-key 4-j group-cycle
+bind-key 4-k group-rcycle
+bind-key 4-s menu-window
 bind-key 4S-h window-htile
 bind-key 4S-v window-vtile
 bind-key 4CS-Up window-resize-up-big
