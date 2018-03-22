@@ -132,6 +132,11 @@ function fish_user_key_bindings
   bind -e -M default \r
   bind -M insert \n force-repaint execute
   bind -M insert \r force-repaint execute
+  bind -M insert \ef forward-word
+  bind -M insert \eb backward-word
+  bind -M insert \cF end-of-line
+  bind -M insert \cB beginning-of-line
+  bind -M default w forward-word
   bind -M default --sets-mode insert \n force-repaint execute
   bind -M default --sets-mode insert \r force-repaint execute
 end
