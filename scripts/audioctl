@@ -11,7 +11,7 @@ case $1 in
     ;;
   "dock")
     sysctl hw.snd.default_unit=3
-    mixer -s vol 20 pcm 20 > /dev/null
+    mixer -s vol 30 pcm 30 > /dev/null
     ;;
   *)
     echo "unknown output"
