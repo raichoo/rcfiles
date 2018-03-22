@@ -82,8 +82,8 @@ color menufg "#282C34"
 color font "#FFFFFF"
 color selfont "#66D9EF"
 color urgencyborder "#F92672"
-color groupborder "#EF5939"
-color ungroupborder "#B8E673"
+color ungroupborder "#EF5939"
+color groupborder "#B8E673"
 
 command lock slock
 command term "st"
