@@ -77,6 +77,8 @@ sticky yes
 moveamount 10
 fontname "Inconsolata:size=10.21"
 
+color activeborder "#FFFFFF"
+color inactiveborder "#7E8E91"
 color menubg "#282C34"
 color menufg "#282C34"
 color font "#FFFFFF"
