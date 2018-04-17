@@ -184,13 +184,6 @@ let g:netrw_liststyle = 3
 let g:netrw_fastbrowse = 0
 let g:netrw_bufsettings = "noma nomod nu nobl nowrap ro rnu"
 
-let g:haskell_enable_quantification = 1
-let g:haskell_enable_typeroles = 1
-let g:haskell_enable_pattern_synonyms = 1
-let g:haskell_indent_case_alternative = 1
-
-let g:hamlet_prevent_invalid_nesting = 0
-
 let g:monodark_disable_background = 1
 
 if !exists('g:airline_symbols')

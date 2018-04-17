@@ -1,3 +1,10 @@
+let g:haskell_enable_quantification = 1
+let g:haskell_enable_typeroles = 1
+let g:haskell_enable_pattern_synonyms = 1
+let g:haskell_indent_case_alternative = 1
+
+let g:hamlet_prevent_invalid_nesting = 0
+
 if executable('hasktags')
   function! s:HaskellRebuildTagsFinished(job_id, data, event) abort
     let g:haskell_rebuild_tags = 0
