@@ -1,3 +1,4 @@
+set path=.,**
 let g:haskell_enable_quantification = 1
 let g:haskell_enable_typeroles = 1
 let g:haskell_enable_pattern_synonyms = 1
