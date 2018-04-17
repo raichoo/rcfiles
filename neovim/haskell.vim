@@ -1,4 +1,9 @@
-set path=.,**
+if exists("g:loaded_haskell_init")
+  finish
+endif
+
+let g:loaded_haskell_init = 1
+
 let g:haskell_enable_quantification = 1
 let g:haskell_enable_typeroles = 1
 let g:haskell_enable_pattern_synonyms = 1
@@ -83,7 +88,7 @@ function! s:HaskellSetup(...) abort
       let l:lts_prefix = matchstr(get(g:, 'haskell_resolver'), '^[^.]*')
       if l:lts_prefix isnot# ''
         let l:envpath = $HOME . '/Local/ghc/' . l:lts_prefix . '/bin'
-        let $PATH = l:envpath . ':' . l:path
+        let $PATH = l:envpath . ':' . join(filter(split(l:path, ':'), 'v:val isnot# "' . l:envpath . '"'), ':')
 
         call jobstart('env PATH=' . l:envpath . ':' . g:haskell_original_path . ' stack --no-install-ghc exec printenv GHC_PACKAGE_PATH', s:HaskellPackagePathHandler)
       else
@@ -125,7 +130,7 @@ function! s:HaskellSetup(...) abort
     endif
   endif
 endfunction
-command! -nargs=? HaskellSetup call s:HaskellSetup(<f-args>)
+command! -nargs=? HaskellEnvironment call s:HaskellSetup(<f-args>)
 
 function! s:HaskellSkel() abort
   if @% is# 'Main.hs'
@@ -146,17 +151,6 @@ function! s:HaskellSettings() abort
   if executable('hoogle')
     setlocal keywordprg=hoogle\ --info
   endif
-
-  " if g:haskell_ide_state is# 'initialized'
-  "   LanguageClientStart
-  "   call s:HaskellHealth('ready')
-  " endif
-
-  " if g:haskell_ide_state is# 'ready'
-  "   setlocal keywordprg=:call\ LanguageClient_textDocument_hover()
-  " elseif g:haskell_ide_state is# 'missing' && executable('hoogle')
-  "   setlocal keywordprg=hoogle\ --info
-  " endif
 endfunction
 
 augroup haskell_commands

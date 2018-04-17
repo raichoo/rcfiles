@@ -25,8 +25,6 @@ Plug 'tpope/vim-fugitive'
 
 call plug#end()
 
-source ~/.config/nvim/haskell.vim
-
 filetype plugin indent on
 
 function! Rename(file) abort
@@ -163,6 +161,14 @@ augroup commands
   au InsertLeave,WinEnter * set cursorline
   au BufNewFile,BufRead *.d setf dtrace
   au BufNewFile,BufRead *.c,*.h setlocal tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab
+augroup end
+
+augroup haskell_commands
+  au!
+  au BufNewFile,BufRead stack.yaml,package.yaml,*.hs source ~/.config/nvim/haskell.vim
+  if filereadable('stack.yaml')
+    source ~/.config/nvim/haskell.vim
+  endif
 augroup end
 
 let g:netrw_banner = 0
