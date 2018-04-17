@@ -1,14 +1,12 @@
 call plug#begin('~/.nvim/plugged')
 
 let g:python3_host_prog = '/usr/local/bin/python3.6'
+
 " essential
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'godlygeek/tabular'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
 
 " colors
 Plug 'raichoo/monodark'
@@ -17,12 +15,9 @@ Plug 'raichoo/monodark'
 Plug 'vim-airline/vim-airline'
 
 " languages
-Plug 'raichoo/smt-vim'
 Plug 'pbrisbin/vim-syntax-shakespeare'
 Plug 'neovimhaskell/haskell-vim'
 Plug 'dag/vim-fish'
-Plug 'rust-lang/rust.vim'
-Plug 'derekelkins/agda-vim'
 
 " git
 Plug 'airblade/vim-gitgutter'
@@ -64,13 +59,8 @@ endfunction
 
 let mapleader="ö"
 
-if isdirectory('.git')
-  call denite#custom#var('file_rec', 'command',
-  \ ['git', 'ls-files', '--others', '--cached', '--exclude-standard'])
-endif
-
-map <silent> <Leader>ls :Denite buffer<CR>
-map <silent> <Leader>lf :Denite file_rec<CR>
+map  <Leader>ls :ls<CR>:b
+map  <Leader>lf :find *
 
 map <silent> [a :prev<CR>
 map <silent> ]a :next<CR>
@@ -171,13 +161,9 @@ augroup commands
   au!
   au InsertEnter,WinEnter * set nocursorline
   au InsertLeave,WinEnter * set cursorline
-  au TermOpen * setlocal nonumber norelativenumber
   au BufNewFile,BufRead *.d setf dtrace
   au BufNewFile,BufRead *.c,*.h setlocal tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab
-  au BufNewFile,BufRead *.agda setf agda
 augroup end
-
-let g:agda_extraincpaths = ["/usr/home/raichoo/Sources/agda-stdlib-0.14/src"]
 
 let g:netrw_banner = 0
 let g:netrw_liststyle = 3
@@ -210,24 +196,3 @@ let g:airline#extensions#tabline#show_close_button = 0
 let g:airline#extensions#tabline#show_tab_type = 0
 let g:airline#extensions#tabline#buffer_idx_mode = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
-
-let g:deoplete#enable_at_startup = 1
-
-let g:LanguageClient_changeThrottle = 0.5
-
-function! denite#get_status_mode() abort
-  return ''
-endfunction
-
-call denite#custom#map(
-      \ 'insert',
-      \ '<C-n>',
-      \ '<denite:move_to_next_line>',
-      \ 'noremap'
-      \)
-call denite#custom#map(
-      \ 'insert',
-      \ '<C-p>',
-      \ '<denite:move_to_previous_line>',
-      \ 'noremap'
-      \)
