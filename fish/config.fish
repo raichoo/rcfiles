@@ -132,6 +132,7 @@ function fish_user_key_bindings
   bind -e -M default \r
   bind -e -M default u
   bind -e -M default \cr
+  bind -e -M insert \cV
   bind -M insert \n force-repaint execute
   bind -M insert \r force-repaint execute
   bind -M insert \ef forward-word
