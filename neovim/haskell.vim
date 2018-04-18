@@ -56,7 +56,6 @@ let g:haskell_supported_extensions = []
 let g:haskell_supported_pragmas = [
   \ 'COLUMN',
   \ 'COMPLETE',
-  \ 'COMPLETE',
   \ 'DEPRECATED',
   \ 'INCOHERENT',
   \ 'INLINABLE',
