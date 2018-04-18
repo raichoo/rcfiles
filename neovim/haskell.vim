@@ -52,12 +52,80 @@ function! s:HaskellHealth(state, resolver)
   AirlineRefresh
 endfunction
 
+let g:haskell_supported_extensions = []
+let g:haskell_supported_pragmas = [
+  \ 'COLUMN',
+  \ 'COMPLETE',
+  \ 'COMPLETE',
+  \ 'DEPRECATED',
+  \ 'INCOHERENT',
+  \ 'INLINABLE',
+  \ 'INLINE',
+  \ 'INLINE CONLIKE',
+  \ 'LANGUAGE',
+  \ 'LINE',
+  \ 'MINIMAL',
+  \ 'NOLINE',
+  \ 'NOINLINE CONLIKE',
+  \ 'NOUNPACK',
+  \ 'OPTIONS_GHC',
+  \ 'OVERLAPPABLE',
+  \ 'OVERLAPPING',
+  \ 'OVERLAPS',
+  \ 'RULES',
+  \ 'SOURCE',
+  \ 'SPECIALIZE',
+  \ 'SPECIALIZE INLINE',
+  \ 'UNPACK',
+  \ 'WARNING']
+
+function! HaskellComplete(findstart, base)
+  if a:findstart
+    let line = getline('.')
+    let start = col('.') - 1
+    while start > 0 && line[start - 1] =~ '\a'
+      let start -= 1
+    endwhile
+    return start
+  else
+    let res = []
+    let l:line = getline('.')
+    if l:line =~ '^{-#\s\+LANGUAGE'
+      for m in g:haskell_supported_extensions
+        if m =~ '^' . a:base
+          call add(res, m)
+        endif
+      endfor
+    elseif l:line =~ '^{-#\s\+$'
+      for m in g:haskell_supported_pragmas
+        if m =~ '^' . a:base
+          call add(res, m)
+        endif
+      endfor
+    endif
+    return res
+  endif
+endfunction
+set omnifunc=HaskellComplete
+
 function! s:HaskellSetup(...) abort
   highlight HaskellUninitLTS guifg=#EF5939 guibg=#465457
   highlight HaskellReadyLTS  guifg=#B8E673 guibg=#465457
   highlight HaskellInitLTS   guifg=#E6DB74 guibg=#465457
 
   let g:haskell_original_path = get(g:, 'haskell_original_path', $PATH)
+  let g:haskell_supported_extensions = []
+
+  function! s:HaskellRegisterExtensions(job_id, data, event) abort
+    for ext in a:data
+      if ext isnot# ''
+        call add(g:haskell_supported_extensions, ext)
+      endif
+    endfor
+  endfunction
+  let s:HaskellRegisterExtensionsHandler = {
+    \ 'on_stdout': function('s:HaskellRegisterExtensions')
+    \ }
 
   function! s:HaskellSetupEnv() abort
     call s:HaskellHealth('ready', get(g:, 'haskell_resolver', '[unknown]'))
@@ -90,10 +158,12 @@ function! s:HaskellSetup(...) abort
         let l:envpath = $HOME . '/Local/ghc/' . l:lts_prefix . '/bin'
         let $PATH = l:envpath . ':' . join(filter(split(l:path, ':'), 'v:val isnot# "' . l:envpath . '"'), ':')
 
+        call jobstart('ghc --supported-extensions', s:HaskellRegisterExtensionsHandler)
         call jobstart('env PATH=' . l:envpath . ':' . g:haskell_original_path . ' stack --no-install-ghc exec printenv GHC_PACKAGE_PATH', s:HaskellPackagePathHandler)
       else
         let $PATH = l:path
 
+        call jobstart('ghc --supported-extensions', s:HaskellSupportedExtensionsHandler)
         call jobstart('env PATH=' . g:haskell_original_path . ' stack --no-install-ghc exec printenv GHC_PACKAGE_PATH', s:HaskellPackagePathHandler)
       endif
     endif
@@ -109,6 +179,7 @@ function! s:HaskellSetup(...) abort
     if isdirectory(l:envpath)
       let $PATH = l:envpath . ':' . g:haskell_original_path
       call s:HaskellHealth('ready', a:1)
+      call jobstart('ghc --supported-extensions', s:HaskellSupportedExtensionsHandler)
     endif
   else
     let l:resolver = systemlist('grep "^resolver:" stack.yaml | cut -d" " -f2')[0]
