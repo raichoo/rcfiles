@@ -162,7 +162,7 @@ function! s:HaskellSetup(...) abort
       else
         let $PATH = l:path
 
-        call jobstart('ghc --supported-extensions', s:HaskellSupportedExtensionsHandler)
+        call jobstart('ghc --supported-extensions', s:HaskellRegisterExtensionsHandler)
         call jobstart('env PATH=' . g:haskell_original_path . ' stack --no-install-ghc exec printenv GHC_PACKAGE_PATH', s:HaskellPackagePathHandler)
       endif
     endif
@@ -178,7 +178,7 @@ function! s:HaskellSetup(...) abort
     if isdirectory(l:envpath)
       let $PATH = l:envpath . ':' . g:haskell_original_path
       call s:HaskellHealth('ready', a:1)
-      call jobstart('ghc --supported-extensions', s:HaskellSupportedExtensionsHandler)
+      call jobstart('ghc --supported-extensions', s:HaskellRegisterExtensionsHandler)
     endif
   else
     let l:resolver = systemlist('grep "^resolver:" stack.yaml | cut -d" " -f2')[0]
