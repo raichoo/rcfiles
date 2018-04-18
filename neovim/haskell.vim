@@ -53,6 +53,7 @@ function! s:HaskellHealth(state, resolver)
 endfunction
 
 let g:haskell_supported_extensions = []
+
 let g:haskell_supported_pragmas = [
   \ 'COLUMN',
   \ 'COMPLETE',
@@ -78,6 +79,53 @@ let g:haskell_supported_pragmas = [
   \ 'UNPACK',
   \ 'WARNING']
 
+let g:haskell_supported_keywords = [
+  \ 'as',
+  \ 'capi',
+  \ 'case',
+  \ 'ccall',
+  \ 'class',
+  \ 'data',
+  \ 'data family',
+  \ 'data instance',
+  \ 'default',
+  \ 'deriving',
+  \ 'deriving anyclass',
+  \ 'deriving instance',
+  \ 'deriving newtype',
+  \ 'deriving stock',
+  \ 'export',
+  \ 'forall',
+  \ 'foreign',
+  \ 'foreign import',
+  \ 'hiding',
+  \ 'import',
+  \ 'import qualified',
+  \ 'in',
+  \ 'infix',
+  \ 'infixl',
+  \ 'infixr',
+  \ 'instance',
+  \ 'interruptible',
+  \ 'let',
+  \ 'mdo',
+  \ 'module',
+  \ 'newtype',
+  \ 'of',
+  \ 'pattern',
+  \ 'prim',
+  \ 'proc',
+  \ 'qualified',
+  \ 'rec',
+  \ 'safe',
+  \ 'static',
+  \ 'type',
+  \ 'type family',
+  \ 'type instance',
+  \ 'type role',
+  \ 'unsafe',
+  \ 'where']
+
 function! HaskellComplete(findstart, base)
   if a:findstart
     let line = getline('.')
@@ -97,6 +145,12 @@ function! HaskellComplete(findstart, base)
       endfor
     elseif l:line =~ '^{-#\s\+$'
       for m in g:haskell_supported_pragmas
+        if m =~ '^' . a:base
+          call add(res, m)
+        endif
+      endfor
+    else
+      for m in g:haskell_supported_keywords
         if m =~ '^' . a:base
           call add(res, m)
         endif
