@@ -271,6 +271,8 @@ function! s:HaskellSkel() abort
 endfunction
 
 function! s:HaskellSettings() abort
+  setlocal suffixesadd+=.hs,.hamlet
+
   if executable('stylish-haskell')
     setlocal formatprg=stylish-haskell
   endif
