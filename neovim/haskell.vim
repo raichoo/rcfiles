@@ -254,7 +254,10 @@ function! s:HaskellSetup(...) abort
     endif
   endif
 endfunction
-command! -nargs=? HaskellEnvironment call s:HaskellSetup(<f-args>)
+function! s:HaskellEnvs(lead, line, pos) abort
+  return system("find ~/Local/ghc -depth 1 -exec basename '{}' + | sort")
+endfunction
+command! -complete=custom,s:HaskellEnvs -nargs=? HaskEnv call s:HaskellSetup(<f-args>)
 
 function! s:HaskellSkel() abort
   if @% is# 'Main.hs'
