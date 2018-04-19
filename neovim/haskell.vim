@@ -31,7 +31,7 @@ if executable('hasktags')
     au BufWritePost *.hs call s:HaskellRebuildTags()
   augroup end
 
-  command! Hasktags call s:HaskellRebuildTags()
+  command! HaskTags call s:HaskellRebuildTags()
 endif
 
 function! s:HaskellHealth(state, resolver)
