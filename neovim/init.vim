@@ -193,3 +193,4 @@ if !exists('g:airline_symbols')
   let g:airline_symbols = {}
 endif
 let g:airline_symbols.readonly = 'RO'
+let g:airline_symbols.linenr = 'LN'
