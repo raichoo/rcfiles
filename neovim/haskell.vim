@@ -282,6 +282,16 @@ function! s:HaskellSettings() abort
   endif
 endfunction
 
+function! s:HaskellStart()
+  if filereadable('stack.yaml')
+    au VimEnter * call s:HaskellSetup()
+    au BufWritePost stack.yaml call s:HaskellSetup()
+  else
+    HaskEnv current
+  endif
+endfunction
+command! HaskStart call s:HaskellStart()
+
 augroup haskell_commands
   au!
   au BufNewFile *.hs call s:HaskellSkel() | call s:HaskellSettings()
@@ -289,9 +299,6 @@ augroup haskell_commands
   au BufNewFile,BufRead *.dump-stg,*.dump-simpl setf haskell
   au BufNewFile,BufRead *.dump-cmm,*.dump-opt-cmm setf c
   au BufNewFile,BufRead *.dump-asm setf asm
-
-  if filereadable('stack.yaml')
-    au VimEnter * call s:HaskellSetup()
-    au BufWritePost stack.yaml call s:HaskellSetup()
-  endif
 augroup end
+
+HaskStart
