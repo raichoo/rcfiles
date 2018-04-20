@@ -1,7 +1,9 @@
-call plug#begin('~/.nvim/plugged')
+set runtimepath+=~/Sources/haskell-env
 
 let g:python3_host_prog = '/usr/local/bin/python3.6'
 let g:monodark_disable_background = 1
+
+call plug#begin('~/.nvim/plugged')
 
 " essential
 Plug 'tpope/vim-repeat'
@@ -165,19 +167,10 @@ augroup commands
   au BufNewFile,BufRead *.c,*.h setlocal tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab
 augroup end
 
-augroup haskell_commands
-  au!
-  au BufNewFile,BufRead stack.yaml,package.yaml,*.hs source ~/.config/nvim/haskell.vim
-  if filereadable('stack.yaml')
-    source ~/.config/nvim/haskell.vim
-  endif
-augroup end
-
 let g:netrw_banner = 0
 let g:netrw_liststyle = 3
 let g:netrw_fastbrowse = 0
 let g:netrw_bufsettings = "noma nomod nu nobl nowrap ro rnu"
-
 
 let g:airline_extensions = ['whitespace', 'tabline']
 let g:airline#extensions#tabline#enabled = 1
