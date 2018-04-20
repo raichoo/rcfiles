@@ -140,8 +140,8 @@ function fish_user_key_bindings
   bind -M insert \cF end-of-line
   bind -M insert \cB beginning-of-line
   bind -M default w forward-word
-  bind -M insert  \cN history-search-backward
-  bind -M insert  \cP history-search-forward
+  bind -M insert  \cP history-search-backward
+  bind -M insert  \cN history-search-forward
   bind -M default --sets-mode insert \n force-repaint execute
   bind -M default --sets-mode insert \r force-repaint execute
 end
