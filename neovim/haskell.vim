@@ -226,12 +226,24 @@ function! s:HaskellSetup(...) abort
    \ }
 
   if a:0
-    let l:envpath = $HOME . '/Local/ghc/' . a:1 . '/bin'
-    call s:HaskellHealth('missing', a:1)
+    let l:ghc = a:1
+    let l:envpath = $HOME . '/Local/ghc/' . l:ghc . '/bin'
+
+    call s:HaskellHealth('missing', l:ghc)
+
+    "resolve current ghc version
+    if l:ghc is# 'current'
+      if isdirectory(l:envpath)
+        let l:ghc = systemlist('readlink $HOME/Local/ghc/current')[0]
+        let l:envpath = $HOME . '/Local/ghc/' . l:ghc . '/bin'
+      else
+        return
+      end
+    end
 
     if isdirectory(l:envpath)
       let $PATH = l:envpath . ':' . g:haskell_original_path
-      call s:HaskellHealth('ready', a:1)
+      call s:HaskellHealth('ready', l:ghc)
       call jobstart('ghc --supported-extensions', s:HaskellRegisterExtensionsHandler)
     endif
   else
