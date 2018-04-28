@@ -1,21 +1,16 @@
-set runtimepath+=~/Sources/haskell-env
-
 let g:python3_host_prog = '/usr/local/bin/python3.6'
 let g:monodark_disable_background = 1
 
 call plug#begin('~/.nvim/plugged')
+Plug 'raichoo/statusline'
+Plug 'raichoo/haskell-env'
+Plug 'raichoo/monodark'
 
 " essential
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'godlygeek/tabular'
-
-" colors
-Plug 'raichoo/monodark'
-
-" airline
-Plug 'vim-airline/vim-airline'
 
 " languages
 Plug 'pbrisbin/vim-syntax-shakespeare'
@@ -24,7 +19,6 @@ Plug 'dag/vim-fish'
 
 " git
 Plug 'airblade/vim-gitgutter'
-Plug 'tpope/vim-fugitive'
 
 call plug#end()
 
@@ -159,6 +153,11 @@ set shortmess+=I
 set grepprg=rg\ --vimgrep\ --no-heading
 set grepformat=%f:%l:%c:%m,%f:%l:%m
 
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+let g:netrw_fastbrowse = 0
+let g:netrw_bufsettings = "noma nomod nu nobl nowrap ro rnu"
+
 augroup commands
   au!
   au InsertEnter,WinEnter * set nocursorline
@@ -166,24 +165,3 @@ augroup commands
   au BufNewFile,BufRead *.d setf dtrace
   au BufNewFile,BufRead *.c,*.h setlocal tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab
 augroup end
-
-let g:netrw_banner = 0
-let g:netrw_liststyle = 3
-let g:netrw_fastbrowse = 0
-let g:netrw_bufsettings = "noma nomod nu nobl nowrap ro rnu"
-
-let g:airline_extensions = ['whitespace', 'tabline']
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#show_tabs = 1
-let g:airline#extensions#tabline#show_buffers = 0
-let g:airline#extensions#tabline#tab_min_count = 2
-let g:airline#extensions#tabline#show_close_button = 0
-let g:airline#extensions#tabline#show_tab_type = 0
-let g:airline#extensions#tabline#buffer_idx_mode = 1
-let g:airline#extensions#tabline#fnamemod = ':t'
-
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
-let g:airline_symbols.readonly = 'RO'
-let g:airline_symbols.linenr = 'LN'
