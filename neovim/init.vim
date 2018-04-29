@@ -5,21 +5,14 @@ call plug#begin('~/.nvim/plugged')
 Plug 'raichoo/statusline'
 Plug 'raichoo/haskell-env'
 Plug 'raichoo/monodark'
-
-" essential
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'godlygeek/tabular'
-
-" languages
 Plug 'pbrisbin/vim-syntax-shakespeare'
 Plug 'neovimhaskell/haskell-vim'
 Plug 'dag/vim-fish'
-
-" git
 Plug 'airblade/vim-gitgutter'
-
 call plug#end()
 
 filetype plugin indent on
@@ -75,7 +68,6 @@ map <silent> ]L :llast<CR>
 map Y y$
 map <silent> & :&&<CR>
 
-tnoremap <C-l> <C-\><C-n>
 nnoremap <expr> j v:count ? 'j' : 'gj'
 nnoremap <expr> k v:count ? 'k' : 'gk'
 vnoremap <expr> j v:count ? 'j' : 'gj'
@@ -87,7 +79,8 @@ noremap <Left> <nop>
 noremap <Right> <nop>
 noremap <PageUp> <nop>
 noremap <PageDown> <nop>
-
+map Q <nop>
+map gQ <nop>
 inoremap <Up> <nop>
 inoremap <Down> <nop>
 inoremap <Left> <nop>
@@ -95,10 +88,9 @@ inoremap <Right> <nop>
 inoremap <PageUp> <nop>
 inoremap <PageDown> <nop>
 
-map Q <nop>
-map gQ <nop>
-
+nnoremap <silent> <C-l> :noh<CR>
 inoremap <C-l> <Esc>
+tnoremap <C-l> <C-\><C-n>
 
 nnoremap <silent> * :call HighlightSearch(1)<CR>:let v:searchforward=1<CR>:set hlsearch<CR>
 nnoremap <silent> # :call HighlightSearch(1)<CR>:let v:searchforward=0<CR>:set hlsearch<CR>
@@ -108,8 +100,6 @@ vnoremap <silent> * :call HighlightSearch(1)<CR>:let v:searchforward=1<CR>:set h
 vnoremap <silent> # :call HighlightSearch(1)<CR>:let v:searchforward=0<CR>:set hlsearch<CR>
 vnoremap <silent> g* :call HighlightSearch(0)<CR>:let v:searchforward=1<CR>:set hlsearch<CR>
 vnoremap <silent> g# :call HighlightSearch(0)<CR>:let v:searchforward=1<CR>:set hlsearch<CR>
-
-nnoremap <silent> <C-l> :noh<CR>
 
 colorscheme monodark
 
@@ -121,17 +111,9 @@ set cpo-=_
 set nojoinspaces
 set splitright
 set inccommand=nosplit
-set noerrorbells
-set novisualbell
-set visualbell t_bv=
 set clipboard=unnamed,unnamedplus
-set mouse=
 set hidden
-set background=dark
-set incsearch
 set linebreak
-set ruler
-set showcmd
 set noshowmode
 set shiftwidth=2
 set tabstop=2
@@ -162,6 +144,5 @@ augroup commands
   au!
   au InsertEnter,WinEnter * set nocursorline
   au InsertLeave,WinEnter * set cursorline
-  au BufNewFile,BufRead *.d setf dtrace
-  au BufNewFile,BufRead *.c,*.h setlocal tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab
+  au BufEnter *.d setf dtrace
 augroup end
