@@ -27,17 +27,15 @@ function! FixWhitespaces() abort
   let l:search = @/
   let l:l = line('.')
   let l:c = col('.')
-
-  %s/\s\+$//e
-
+  %s/\(\s\+\|\s*\+\)$//e
   let @/ = l:search
+  call statusline#BufferState()
   call cursor(l:l, l:c)
 endfunction
 command! FixWhitespaces call FixWhitespaces()
 
 function! HighlightSearch(word) abort
   let l:w = expand('<cword>')
-
   if a:word
     let @/ = '\<' . l:w . '\>'
   else
