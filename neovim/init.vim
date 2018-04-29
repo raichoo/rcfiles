@@ -1,5 +1,4 @@
 let g:python3_host_prog = '/usr/local/bin/python3.6'
-let g:monodark_disable_background = 1
 
 call plug#begin('~/.nvim/plugged')
 Plug 'raichoo/statusline'
