@@ -80,10 +80,10 @@ map <silent> ]a :next<CR>
 map <silent> [A :first<CR>
 map <silent> ]A :last<CR>
 
-map <silent> [q :cprev<CR>
-map <silent> ]q :cnext<CR>
-map <silent> [Q :cfirst<CR>
-map <silent> ]Q :clast<CR>
+map <silent> [c :cprev<CR>
+map <silent> ]c :cnext<CR>
+map <silent> [C :cfirst<CR>
+map <silent> ]C :clast<CR>
 
 map <silent> [l :lprev<CR>
 map <silent> ]l :lnext<CR>
