@@ -16,11 +16,39 @@ call plug#end()
 
 filetype plugin indent on
 
-function! Rename(file) abort
-  let l:f = expand('%')
-  execute 'saveas ' . shellquote(a:file) . ' | ' . 'bd! # | !rm ' . shellquote(l:f)
-endfunction
-command! -complete=file -nargs=1 Rename call Rename(<f-args>)
+colorscheme monodark
+
+set path=.,**
+set formatoptions=jcroql
+set termguicolors
+set guicursor=a:block-blinkon100-Cursor/Cursor
+set cpo-=_
+set nojoinspaces
+set splitright
+set inccommand=nosplit
+set clipboard=unnamed,unnamedplus
+set hidden
+set linebreak
+set noshowmode
+set shiftwidth=2
+set tabstop=2
+set relativenumber number
+set expandtab
+set cmdheight=1
+set cursorline
+set undofile
+set undodir=~/.nvim/tmp/undo/
+set backupdir=~/.nvim/tmp/backup/
+set directory=~/.nvim/tmp/swap/
+set backup
+set noswapfile
+set list
+set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮,nbsp:▩
+set wrap
+set textwidth=80
+set shortmess+=I
+set grepprg=rg\ --vimgrep\ --no-heading
+set grepformat=%f:%l:%c:%m,%f:%l:%m
 
 function! FixWhitespaces() abort
   let l:search = @/
@@ -97,40 +125,6 @@ vnoremap <silent> * :call HighlightSearch(1)<CR>:let v:searchforward=1<CR>:set h
 vnoremap <silent> # :call HighlightSearch(1)<CR>:let v:searchforward=0<CR>:set hlsearch<CR>
 vnoremap <silent> g* :call HighlightSearch(0)<CR>:let v:searchforward=1<CR>:set hlsearch<CR>
 vnoremap <silent> g# :call HighlightSearch(0)<CR>:let v:searchforward=1<CR>:set hlsearch<CR>
-
-colorscheme monodark
-
-set path=.,**
-set formatoptions=jcroql
-set termguicolors
-set guicursor=a:block-blinkon100-Cursor/Cursor
-set cpo-=_
-set nojoinspaces
-set splitright
-set inccommand=nosplit
-set clipboard=unnamed,unnamedplus
-set hidden
-set linebreak
-set noshowmode
-set shiftwidth=2
-set tabstop=2
-set relativenumber number
-set expandtab
-set cmdheight=1
-set cursorline
-set undofile
-set undodir=~/.nvim/tmp/undo/
-set backupdir=~/.nvim/tmp/backup/
-set directory=~/.nvim/tmp/swap/
-set backup
-set noswapfile
-set list
-set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮,nbsp:▩
-set wrap
-set textwidth=80
-set shortmess+=I
-set grepprg=rg\ --vimgrep\ --no-heading
-set grepformat=%f:%l:%c:%m,%f:%l:%m
 
 let g:netrw_banner = 0
 let g:netrw_liststyle = 3
