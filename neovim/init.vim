@@ -143,4 +143,5 @@ augroup commands
   au InsertEnter,WinEnter * set nocursorline
   au InsertLeave,WinEnter * set cursorline
   au BufEnter *.d setf dtrace
+  au TermOpen * setlocal nonumber
 augroup end
