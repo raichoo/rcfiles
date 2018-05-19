@@ -67,8 +67,6 @@ bind-key CMS-r restart
 
 bind-mouse 4-1 window-move
 bind-mouse 4-2 window-resize
-bind-mouse 4-1 window-move
-bind-mouse 4-2 window-resize
 
 bind-mouse 4M-1 menu-window
 
