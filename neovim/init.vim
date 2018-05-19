@@ -1,19 +1,5 @@
 let g:python3_host_prog = '/usr/local/bin/python3.6'
 
-call plug#begin('~/.nvim/plugged')
-Plug 'raichoo/statusline'
-Plug 'raichoo/haskell-env'
-Plug 'raichoo/monodark'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-commentary'
-Plug 'godlygeek/tabular'
-Plug 'pbrisbin/vim-syntax-shakespeare'
-Plug 'neovimhaskell/haskell-vim'
-Plug 'dag/vim-fish'
-Plug 'airblade/vim-gitgutter'
-call plug#end()
-
 filetype plugin indent on
 
 colorscheme monodark
