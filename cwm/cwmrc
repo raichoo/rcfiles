@@ -95,7 +95,7 @@ command irssi "st -t irssi -c chat -g 228x68+936+22 -e irssi"
 command jabber.ccc.de "st -t jabber.ccc.de -c chat -g 125x55+32+22 -e jackline -f .config/xmpp/jabber.ccc.de"
 command jabber.otr.im "st -t jabber.otr.im -c chat -g 125x35+32+857 -e jackline -f .config/xmpp/jabber.otr.im"
 command netstat "st -t netstat -c monitor -g +1427+1074 -e systat -net 5"
-command top "st -t top -c monitor -g +1994+1074 -e top -P -s 5"
+command top "st -t top -c monitor -g +1994+1074 -e top -P -s 5 12"
 command vlc vlc
 command vmstat "st -t vmstat -c monitor -g +1427+1074 -e systat -vm 5"
 #command wttr "st -t wttr -g 125x45 -e curl wttr.in"
