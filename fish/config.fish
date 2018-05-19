@@ -87,11 +87,11 @@ function time_prompt
 end
 
 function user_prompt
-  printf "%s%s%s" (set_color --bold FD971F) (whoami) (set_color normal)
+  printf "%s$USER%s" (set_color --bold FD971F) (set_color normal)
 end
 
 function host_prompt
-  printf "%s%s%s" (set_color --bold F92672) (hostname) (set_color normal)
+  printf "%s$hostname%s" (set_color --bold F92672) (set_color normal)
 end
 
 function fish_prompt
