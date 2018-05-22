@@ -78,6 +78,7 @@ map <silent> ]L :llast<CR>
 
 map Y y$
 map <silent> & :&&<CR>
+vmap <silent> & :'<,'>&&<CR>
 
 nnoremap <expr> j v:count ? 'j' : 'gj'
 nnoremap <expr> k v:count ? 'k' : 'gk'
