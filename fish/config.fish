@@ -41,6 +41,7 @@ set -g __fish_git_prompt_color_branch E6DB74
 
 alias vi='nvim'
 alias vim='nvim'
+alias lock='/usr/bin/lock -n -p'
 
 function fish_greeting
 end
