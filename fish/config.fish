@@ -1,23 +1,23 @@
 # setup paths
-if status --is-login
+if status --is-login;and test $USER != 'root'
   source /usr/home/raichoo/.opam/opam-init/init.fish > /dev/null 2> /dev/null or true
   set -x PATH /usr/home/raichoo/Local/bin /usr/home/raichoo/.local/bin $PATH
-  #  set -x MANPATH /usr/home/raichoo/Local/man $MANPATH
   set -x PYTHONPATH /usr/home/raichoo/.local/lib/python3.6/site-packages /usr/home/raichoo/Local/python/lib/python2.7/site-packages /usr/home/raichoo/Local/z3/lib/python2.7/dist-packages $PYTHONPATH
   set -x __fish_bin_dir /usr/home/raichoo/Local/fish/bin
+
+  set -x EDITOR /usr/home/raichoo/Local/bin/nvim
+
+  set -x DARCS_ALWAYS_COLOR 1
+  set -x DARCS_ALTERNATIVE_COLOR 1
+  set -x DARCS_DO_COLOR_LINES 1
+  set -x MANPAGER "nvim -c 'set ft=man' -"
+  set -x BROWSER (which firefox)
 end
 
-set -x EDITOR /usr/home/raichoo/Local/bin/nvim
-
-set -x DARCS_ALWAYS_COLOR 1
-set -x DARCS_ALTERNATIVE_COLOR 1
-set -x DARCS_DO_COLOR_LINES 1
-
-set -x MANPAGER "nvim -c 'set ft=man' -"
-set -x BROWSER (which firefox)
 set -x PAGER "less"
 set -x LESS "-qR"
 set -g fish_term24bit 1
+set -x LSCOLORS "gxfxcxdxbxegedabagacad"
 
 set -g __fish_git_prompt_show_informative_status 1
 set -g __fish_git_prompt_hide_untrackedfiles 1
@@ -38,8 +38,6 @@ set -g __fish_git_prompt_color_invalidstate EF5939
 set -g __fish_git_prompt_color_untrackedfiles EF5939
 set -g __fish_git_prompt_color_cleanstate B8E673
 set -g __fish_git_prompt_color_branch E6DB74
-
-set -x LSCOLORS "gxfxcxdxbxegedabagacad"
 
 alias vi='nvim'
 alias vim='nvim'
@@ -95,7 +93,11 @@ function host_prompt
 end
 
 function fish_prompt
-  printf ":%s@%s:%s%s» " (user_prompt) (host_prompt) (pwd_prompt) (__fish_git_prompt "(%s)")
+  if test $USER != 'root'
+    printf ":%s@%s:%s%s» " (user_prompt) (host_prompt) (pwd_prompt) (__fish_git_prompt "(%s)")
+  else
+    printf ":%sroot%s:%s%s» " (set_color --bold EF5939) (set_color normal) (pwd_prompt) (__fish_git_prompt "(%s)")
+  end
 end
 
 function battery_prompt
