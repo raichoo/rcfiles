@@ -100,7 +100,15 @@ inoremap <Right> <nop>
 inoremap <PageUp> <nop>
 inoremap <PageDown> <nop>
 
-nnoremap <silent> <C-l> :noh<CR>
+function! ClearTerminal() abort
+  if exists('b:terminal_job_id')
+    if confirm("Clear terminal?", "&Yes\n&No", 2) == 1
+      call chansend(b:terminal_job_id, '')
+    endif
+  endif
+endfunction
+
+nnoremap <silent> <C-l> :noh<CR>:call ClearTerminal()<CR>
 inoremap <C-l> <Esc>
 tnoremap <C-l> <C-\><C-n>
 
