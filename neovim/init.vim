@@ -23,9 +23,9 @@ set expandtab
 set cmdheight=1
 set cursorline
 set undofile
-set undodir=~/.nvim/tmp/undo/
-set backupdir=~/.nvim/tmp/backup/
-set directory=~/.nvim/tmp/swap/
+set undodir=~/.config/nvim/tmp/undo/
+set backupdir=~/.config/nvim/tmp/backup/
+set directory=~/.config/nvim/tmp/swap/
 set backup
 set noswapfile
 set list
