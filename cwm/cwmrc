@@ -43,8 +43,6 @@ bind-key 4M-6 group-toggle-6
 bind-key 4M-7 group-toggle-7
 bind-key 4M-8 group-toggle-8
 bind-key 4M-9 group-toggle-9
-bind-key 4-Up window-lower
-bind-key 4-Down window-raise
 bind-key 4-u window-raise
 bind-key 4-d window-lower
 bind-key 4-Tab window-cycle
