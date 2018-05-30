@@ -112,14 +112,14 @@ nnoremap <silent> <C-l> :noh<CR>:call ClearTerminal()<CR>
 inoremap <C-l> <Esc>
 tnoremap <C-l> <C-\><C-n>
 
-nnoremap <silent> * :call HighlightSearch(1)<CR>:let v:searchforward=1<CR>:set hlsearch<CR>
-nnoremap <silent> # :call HighlightSearch(1)<CR>:let v:searchforward=0<CR>:set hlsearch<CR>
-nnoremap <silent> g* :call HighlightSearch(0)<CR>:let v:searchforward=1<CR>:set hlsearch<CR>
-nnoremap <silent> g# :call HighlightSearch(0)<CR>:let v:searchforward=0<CR>:set hlsearch<CR>
-vnoremap <silent> * :call HighlightSearch(1)<CR>:let v:searchforward=1<CR>:set hlsearch<CR>
-vnoremap <silent> # :call HighlightSearch(1)<CR>:let v:searchforward=0<CR>:set hlsearch<CR>
-vnoremap <silent> g* :call HighlightSearch(0)<CR>:let v:searchforward=1<CR>:set hlsearch<CR>
-vnoremap <silent> g# :call HighlightSearch(0)<CR>:let v:searchforward=1<CR>:set hlsearch<CR>
+nnoremap <silent> * :call HighlightSearch(1)<CR>:let v:searchforward=1<CR>:set hls<CR>
+nnoremap <silent> # :call HighlightSearch(1)<CR>:let v:searchforward=0<CR>:set hls<CR>
+nnoremap <silent> g* :call HighlightSearch(0)<CR>:let v:searchforward=1<CR>:set hls<CR>
+nnoremap <silent> g# :call HighlightSearch(0)<CR>:let v:searchforward=0<CR>:set hls<CR>
+vnoremap <silent> * :call HighlightSearch(1)<CR>:let v:searchforward=1<CR>:set hls<CR>
+vnoremap <silent> # :call HighlightSearch(1)<CR>:let v:searchforward=0<CR>:set hls<CR>
+vnoremap <silent> g* :call HighlightSearch(0)<CR>:let v:searchforward=1<CR>:set hls<CR>
+vnoremap <silent> g# :call HighlightSearch(0)<CR>:let v:searchforward=1<CR>:set hls<CR>
 
 let g:netrw_banner = 0
 let g:netrw_liststyle = 3
