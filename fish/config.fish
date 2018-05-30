@@ -97,7 +97,7 @@ function fish_prompt
   if test $USER != 'root'
     printf ":%s@%s:%s%s» " (user_prompt) (host_prompt) (pwd_prompt) (__fish_git_prompt "(%s)")
   else
-    printf ":%sroot%s:%s%s» " (set_color --bold EF5939) (set_color normal) (pwd_prompt) (__fish_git_prompt "(%s)")
+    printf ":%sroot%s:%s» " (set_color --bold EF5939) (set_color normal) (pwd_prompt)
   end
 end
 
